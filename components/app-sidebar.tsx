@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useMisCursos } from "@/hooks/useMisCursos"
 import { useMisAsignaturas } from "@/hooks/use-mis-asignaturas"
 import {
   BarChartIcon,
@@ -31,6 +32,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+
 const data = {
   user: {
     name: "shadcn",
@@ -58,6 +60,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const asignaturas = useMisAsignaturas()
+  const cursos = useMisCursos() 
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -101,6 +104,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           ))}
         </SidebarMenu>
 
+        <SidebarMenu>
+  <SidebarMenuItem>
+    <SidebarMenuButton asChild>
+      <span className="sidebar-section-title pointer-events-none">
+        Mis Cursos
+      </span>
+    </SidebarMenuButton>
+  </SidebarMenuItem>
+
+  {cursos.map((curso) => (
+    <SidebarMenuItem key={curso.acronimo}>
+      <SidebarMenuButton asChild>
+        <a href="#">
+          <span className="code-section-title">{curso.acronimo}</span> –{" "}
+          <span className="name-section-title">{curso.nombre}</span>
+        </a>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  ))}
+</SidebarMenu>
+
+
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
@@ -109,3 +134,4 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     </Sidebar>
   )
 }
+

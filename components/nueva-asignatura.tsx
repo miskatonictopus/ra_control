@@ -121,7 +121,7 @@ export function NuevaAsignatura({
   const isFormValid = codigo.trim() && nombre.trim() && creditos.trim()
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-start justify-center p-4">
+    <div className="bg-zinc-950 flex items-start justify-center p-4">
       <div className="w-full max-w-2xl space-y-6">
         <Card className="bg-zinc-900 border-zinc-700">
           <CardHeader className="text-left">

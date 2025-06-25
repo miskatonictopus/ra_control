@@ -2,22 +2,36 @@ export {}
 
 declare global {
   interface Window {
-    electron: {
-      ipcRenderer: {
-        invoke: (...args: any[]) => Promise<any>
-        electronAPI: ElectronAPI;
-      }
-    }
+    electronAPI: ElectronAPI;
   }
 
   interface ElectronAPI {
-    guardarAsignatura: (filename: string, data: any) => Promise<void>;
-    leerAsignaturasLocales: () => Promise<Asignatura[]>;
+    guardarAsignatura: (filename: string, data: any) => Promise<void>
+    leerAsignaturasLocales: () => Promise<Asignatura[]>
+    guardarCurso: (filename: string, data: any) => Promise<void>
+    leerCursosLocales: () => Promise<Curso[]>
+    guardarAlumno: (data: Alumno) => Promise<void>
+    leerAlumnos: () => Promise<Alumno[]>
   }
 
   interface Asignatura {
-    codigo: string;
+    codigo: string
+    nombre: string
+    creditos?: number
+  }
+
+  interface Curso {
+    acronimo: string
+    nombre: string
+    nivel: string
+    grado: string
+  }
+
+  interface Alumno {
+    apellido: string;
     nombre: string;
-    creditos?: number;
+    curso: string;             
+    asignaturas: string[];      
   }
 }
+
