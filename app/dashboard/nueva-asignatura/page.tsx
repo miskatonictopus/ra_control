@@ -26,9 +26,9 @@ export default function NuevaAsignaturaPage() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 w-full">
+    <div className="flex flex-col lg:flex-row gap-0 w-full">
       {/* Columna izquierda: ancho máximo fijo */}
-      <div className="w-full lg:w-[420px] flex-shrink-0 flex flex-col gap-6">
+      <div className="w-full lg:w-[420px] flex-shrink-0 flex flex-col gap-2 m-2">
         <NuevaAsignatura
           codigoParcial=""
           onCambiar={handleCambiar}
@@ -40,8 +40,11 @@ export default function NuevaAsignaturaPage() {
       </div>
 
       {/* Columna derecha: ocupa el espacio restante */}
-      <div className="flex-1 overflow-x-auto">
+      <div className="flex-1 overflow-x-auto gap-0">
+  <div className="w-full flex-shrink-0 flex flex-col gap-2 m-2 p-4 ml-2 min-w-[600px] max-w-[720px] lg:w-[700px]">
+    {/* contenido */}
         <TablaAlumnos />
+      </div>
       </div>
     </div>
   )

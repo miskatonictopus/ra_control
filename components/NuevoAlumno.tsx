@@ -98,12 +98,12 @@ interface NuevoAlumnoProps {
           <label className="text-sm text-zinc-400 mb-1 block">Asignaturas</label>
           <div className="grid grid-cols-1 gap-2">
             {asignaturas.map((a) => (
-              <label key={a.codigo} className="flex items-center space-x-2 text-white">
+              <label key={a.id} className="flex items-center space-x-2 text-white">
                 <Checkbox
-                  checked={asignaturasSeleccionadas.includes(a.codigo)}
-                  onCheckedChange={() => toggleAsignatura(a.codigo)}
+                  checked={asignaturasSeleccionadas.includes(a.id)}
+                  onCheckedChange={() => toggleAsignatura(a.id)}
                 />
-                <span>{a.codigo} – {a.nombre}</span>
+                <span>{a.id} – {a.nombre}</span>
               </label>
             ))}
           </div>

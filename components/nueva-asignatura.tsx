@@ -6,6 +6,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { InputWithLabel } from "@/components/input-with-label"
 
 import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog"
+
+import { useMisAsignaturas } from "@/hooks/use-mis-asignaturas"
+
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -52,6 +64,11 @@ export function NuevaAsignatura({
 
   const jsonURL = "https://raw.githubusercontent.com/miskatonictopus/Auswertecontroller/refs/heads/main/asignaturas_FP.json"
 
+  const [mostrarAlertaDuplicada, setMostrarAlertaDuplicada] = useState(false)
+  const [mostrarAlertaNoExiste, setMostrarAlertaNoExiste] = useState(false)
+  const asignaturasLocales = useMisAsignaturas()
+
+
   useEffect(() => {
     fetch(jsonURL)
       .then((res) => res.json())
@@ -71,13 +88,21 @@ export function NuevaAsignatura({
   }, [codigo, asignaturas])
 
   useEffect(() => {
-    const asignatura = asignaturas[codigo]
-    if (asignatura) {
-      setNombre(asignatura.nombre)
-      setCreditos(asignatura.ects.toString())
-      setDescripcion(`Duración total: ${asignatura.duracion}, Centro: ${asignatura.centro_educativo}, Empresa: ${asignatura.empresa}`)
+    if (codigo.length === 4) {
+      const yaRegistrada = asignaturasLocales.some((a) => a.id === codigo)
+      if (yaRegistrada) {
+        setMostrarAlertaDuplicada(true)
+        return
+      }
+  
+      const existeEnRemoto = Object.values(asignaturas).find((a) => a.codigo === codigo)
+
+      if (!existeEnRemoto) {
+        setMostrarAlertaNoExiste(true)
+      }
     }
-  }, [codigo, asignaturas])
+  }, [codigo, asignaturasLocales])
+  
 
   const seleccionarAsignatura = (codigo: string) => {
     const asignatura = asignaturas[codigo]
@@ -90,21 +115,22 @@ export function NuevaAsignatura({
   }
 
   const guardarAsignaturaLocal = async () => {
-    const filename = `${codigo}_${nombre}.json`;
+    const filename = `${codigo}_${nombre}`.replace(/[^\w\-]/gi, "_") + ".json";
+  
     const datos = {
-      codigo,
+      id: codigo,
       nombre,
       creditos,
       descripcion,
       CE: asignaturas[codigo]?.CE || [],
-      RA: asignaturas[codigo]?.RA || []
+      RA: asignaturas[codigo]?.RA || [],
     };
   
     try {
       console.log("🔄 Enviando datos a Electron...");
-      await window.electronAPI.guardarAsignatura(filename, datos);
-      console.log("✅ Archivo guardado correctamente");
-      alert("Asignatura guardada correctamente en Documentos");
+      const res = await window.electronAPI.guardarAsignatura(filename, datos);
+      console.log("✅ Asignatura guardada correctamente:", filename);
+      alert("Asignatura guardada correctamente en la aplicación");
     } catch (error) {
       console.error("❌ Error al guardar asignatura:", error);
       alert("Error al guardar asignatura (ver consola)");
@@ -112,11 +138,27 @@ export function NuevaAsignatura({
   };
 
   const handleConfirmar = () => {
+    const yaRegistrada = asignaturasLocales.some((a) => a.id === codigo)
+  
+    if (yaRegistrada) {
+      setMostrarAlertaDuplicada(true)
+      return
+    }
+  
+    const existeEnRemoto = asignaturas[codigo] // <– esta es la fuente original
+    if (!existeEnRemoto) {
+      setMostrarAlertaNoExiste(true)
+      return
+    }
+  
     if (onConfirmar) {
       onConfirmar({ codigo, nombre, creditos, descripcion })
     }
+  
     setMostrarModal(true)
   }
+  
+  
 
   const isFormValid = codigo.trim() && nombre.trim() && creditos.trim()
 
@@ -235,6 +277,48 @@ export function NuevaAsignatura({
             </Button>
           </DialogContent>
         </Dialog>
+
+        <AlertDialog open={mostrarAlertaDuplicada} onOpenChange={setMostrarAlertaDuplicada}>
+  <AlertDialogContent className="bg-zinc-900 border-zinc-700 text-white">
+    <AlertDialogHeader>
+      <AlertDialogTitle>Asignatura ya registrada</AlertDialogTitle>
+      <AlertDialogDescription>
+        El código <span className="font-bold text-green-400">{codigo}</span> ya existe en tu sistema.
+        No es necesario volver a registrarla.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+
+    {/* ✅ Aquí debe estar */}
+    <AlertDialogFooter>
+      <AlertDialogAction
+        onClick={() => setMostrarAlertaDuplicada(false)}
+        className="bg-white hover:bg-emerald-400 text-zinc-950 border-none hover:border-none">
+        Entendido
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
+<AlertDialog open={mostrarAlertaNoExiste} onOpenChange={setMostrarAlertaNoExiste}>
+  <AlertDialogContent className="bg-zinc-900 border-zinc-700 text-white">
+    <AlertDialogHeader>
+      <AlertDialogTitle>Asignatura no encontrada</AlertDialogTitle>
+      <AlertDialogDescription>
+        El código <span className="font-bold text-green-400">{codigo}</span> no está registrado o no existe en el archivo de asignaturas.
+        Por favor, verifica que lo hayas escrito correctamente.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogAction
+        onClick={() => setMostrarAlertaNoExiste(false)}
+        className="bg-white hover:bg-emerald-400 text-zinc-950 border-none hover:border-none">
+        Cerrar
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
+
 
       </div>
     </div>

@@ -94,10 +94,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
 
           {asignaturas.map((asig) => (
-            <SidebarMenuItem key={asig.codigo}>
+            <SidebarMenuItem key={asig.id}>
               <SidebarMenuButton asChild>
                 <a href="#">
-                <span className="code-section-title">{asig.codigo}</span> - <span className="name-section-title">{asig.nombre}</span>
+                <span className="code-section-title">{asig.id}</span> - <span className="name-section-title">{asig.nombre}</span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>

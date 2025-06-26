@@ -1,8 +1,18 @@
 const fs = require("fs");
-const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const crypto = require("crypto");
+const { app, BrowserWindow, ipcMain } = require("electron");
 
+// 📁 Carpeta persistente local dentro del proyecto
+const dataDir = path.join(__dirname, "data");
+const alumnosDir = path.join(dataDir, "alumnos");
+const cursosDir = path.join(dataDir, "cursos");
+const asignaturasDir = path.join(dataDir, "asignaturas");
+
+// Crear estructura si no existe
+fs.mkdirSync(alumnosDir, { recursive: true });
+fs.mkdirSync(cursosDir, { recursive: true });
+fs.mkdirSync(asignaturasDir, { recursive: true });
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -16,76 +26,20 @@ function createWindow() {
   });
 
   win.loadURL("http://localhost:3000/dashboard/nueva-asignatura");
-  win.webContents.openDevTools(); // Opcional para depuración
+  win.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);
-
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 
-ipcMain.handle("guardar-asignatura-json", async (event, filename, data) => {
-  const saveDir = path.join(app.getPath("userData"), "asignaturas");
-  const filePath = path.join(saveDir, filename);
-
-  fs.mkdirSync(saveDir, { recursive: true });
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
-
-  console.log("✅ Archivo guardado en:", filePath); // <- Aquí sí está bien
-});
-
-ipcMain.handle("leer-asignaturas-locales", async () => {
-  const dir = path.join(app.getPath("userData"), "asignaturas");
-  try {
-    const files = fs.readdirSync(dir);
-    const asignaturas = files
-      .filter((f) => f.endsWith(".json"))
-      .map((file) => {
-        const content = fs.readFileSync(path.join(dir, file), "utf-8");
-        return JSON.parse(content);
-      });
-    return asignaturas;
-  } catch (err) {
-    console.error("Error leyendo asignaturas:", err);
-    return [];
-  }
-});
-
-ipcMain.handle("guardar-curso-json", async (event, filename, data) => {
-  const saveDir = path.join(app.getPath("userData"), "cursos");
-  const filePath = path.join(saveDir, filename);
-  fs.mkdirSync(saveDir, { recursive: true });
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
-  console.log("✅ Curso guardado en:", filePath);
-});
-
-ipcMain.handle("leer-cursos-locales", async () => {
-  const dir = path.join(app.getPath("userData"), "cursos");
-  try {
-    const files = fs.readdirSync(dir);
-    const cursos = files
-      .filter((f) => f.endsWith(".json"))
-      .map((file) => {
-        const content = fs.readFileSync(path.join(dir, file), "utf-8");
-        return JSON.parse(content);
-      });
-    return cursos;
-  } catch (err) {
-    console.error("Error leyendo cursos:", err);
-    return [];
-  }
-});
+// UTILIDADES
 
 function encryptAlumnoData(data, key) {
-  const iv = crypto.randomBytes(12); // CIFRADO AES-256
+  const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
-
-  const encrypted = Buffer.concat([
-    cipher.update(JSON.stringify(data), "utf8"),
-    cipher.final()
-  ]);
-
+  const encrypted = Buffer.concat([cipher.update(JSON.stringify(data), "utf8"), cipher.final()]);
   const tag = cipher.getAuthTag();
 
   return {
@@ -95,29 +49,6 @@ function encryptAlumnoData(data, key) {
   };
 }
 
-const alumnoKey = crypto.scryptSync("clave-secreta-super-segura", "salt-único", 32);
-
-
-ipcMain.handle("guardar-alumno", async (event, alumnoData) => {
-  try {
-    const encrypted = encryptAlumnoData(alumnoData, alumnoKey);
-
-    const saveDir = path.join(app.getPath("userData"), "alumnos");
-    fs.mkdirSync(saveDir, { recursive: true });
-
-    const filename = `${alumnoData.apellido}_${alumnoData.nombre}`.replace(/[^\w\s-]/gi, "_") + ".json";
-
-    const filePath = path.join(saveDir, filename);
-
-    fs.writeFileSync(filePath, JSON.stringify(encrypted, null, 2), "utf-8");
-
-    console.log("🧑‍🎓 Alumno guardado:", filePath);
-  } catch (error) {
-    console.error("❌ Error al guardar alumno cifrado:", error);
-    throw error;
-  }
-});
-
 function decryptAlumnoData(payload, key) {
   const iv = Buffer.from(payload.iv, "hex");
   const tag = Buffer.from(payload.tag, "hex");
@@ -125,21 +56,100 @@ function decryptAlumnoData(payload, key) {
 
   const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
   decipher.setAuthTag(tag);
-
-  const decrypted = Buffer.concat([
-    decipher.update(encrypted),
-    decipher.final()
-  ]);
+  const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
 
   return JSON.parse(decrypted.toString("utf8"));
 }
 
-ipcMain.handle("leer-alumnos", async () => {
-  const dir = path.join(app.getPath("userData"), "alumnos");
+const alumnoKey = crypto.scryptSync("clave-secreta-super-segura", "salt-único", 32);
+
+// 🧠 VALIDACIÓN
+function leerJSONsEnDir(dirPath) {
+  if (!fs.existsSync(dirPath)) return [];
+  return fs
+    .readdirSync(dirPath)
+    .filter((f) => f.endsWith(".json"))
+    .map((file) => {
+      const raw = fs.readFileSync(path.join(dirPath, file), "utf-8");
+      return JSON.parse(raw);
+    });
+}
+
+// =======================
+// 📚 ASIGNATURAS
+// =======================
+
+ipcMain.handle("guardar-asignatura-json", async (event, filename, data) => {
+  const filePath = path.join(asignaturasDir, filename);
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+  console.log("Asignatura guardada en:", filePath);
+});
+
+ipcMain.handle("leer-asignaturas-locales", async () => {
+  return leerJSONsEnDir(asignaturasDir);
+});
+
+// =======================
+// 🏫 CURSOS
+// =======================
+
+ipcMain.handle("guardar-curso-json", async (event, filename, data) => {
+  const filePath = path.join(cursosDir, filename);
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+  console.log("✅ Curso guardado en:", filePath);
+});
+
+ipcMain.handle("leer-cursos-locales", async () => {
+  return leerJSONsEnDir(cursosDir);
+});
+
+// =======================
+// 🧑‍🎓 ALUMNOS (cifrados)
+// =======================
+
+ipcMain.handle("guardar-alumno", async (event, alumnoData) => {
   try {
-    const files = fs.readdirSync(dir).filter((f) => f.endsWith(".json"));
-    return files.map((file) => {
-      const payload = JSON.parse(fs.readFileSync(path.join(dir, file), "utf8"));
+    const cursos = leerJSONsEnDir(cursosDir);
+    const asignaturas = leerJSONsEnDir(asignaturasDir);
+
+    const cursoIds = cursos.map((c) => c.id);
+    const asignaturaIds = asignaturas.map((a) => a.id);
+    const errores = [];
+
+    if (!cursoIds.includes(alumnoData.cursoId)) {
+      errores.push(`Curso no válido: ${alumnoData.cursoId}`);
+    }
+
+    for (const aid of alumnoData.asignaturasIds || []) {
+      if (!asignaturaIds.includes(aid)) {
+        errores.push(`Asignatura no válida: ${aid}`);
+      }
+    }
+
+    if (errores.length > 0) {
+      console.warn("❌ Error de integridad:", errores);
+      return { ok: false, errores };
+    }
+
+    const encrypted = encryptAlumnoData(alumnoData, alumnoKey);
+    const filename = `${alumnoData.apellido}_${alumnoData.nombre}`.replace(/[^\w\s-]/gi, "_") + ".json";
+    const filePath = path.join(alumnosDir, filename);
+
+    fs.writeFileSync(filePath, JSON.stringify(encrypted, null, 2), "utf-8");
+    console.log("🧑‍🎓 Alumno guardado:", filePath);
+    return { ok: true };
+
+  } catch (error) {
+    console.error("❌ Error al guardar alumno cifrado:", error);
+    throw error;
+  }
+});
+
+ipcMain.handle("leer-alumnos", async () => {
+  try {
+    const archivos = fs.readdirSync(alumnosDir).filter((f) => f.endsWith(".json"));
+    return archivos.map((file) => {
+      const payload = JSON.parse(fs.readFileSync(path.join(alumnosDir, file), "utf8"));
       return decryptAlumnoData(payload, alumnoKey);
     });
   } catch (err) {
@@ -147,9 +157,3 @@ ipcMain.handle("leer-alumnos", async () => {
     return [];
   }
 });
-
-
-
-
-
-

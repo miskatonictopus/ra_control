@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 type Asignatura = {
-  codigo: string
+  id: string
   nombre: string
   creditos?: number
 }
@@ -11,7 +11,7 @@ export function useMisAsignaturas() {
 
   useEffect(() => {
     window.electronAPI?.leerAsignaturasLocales?.()
-      .then((data) => {
+      .then((data: any[]) => {
         console.log("📁 Datos recibidos desde Electron:", data)
         setAsignaturas(data)
       })
@@ -20,3 +20,4 @@ export function useMisAsignaturas() {
 
   return asignaturas
 }
+
