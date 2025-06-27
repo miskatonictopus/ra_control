@@ -79,6 +79,7 @@ export function NavDocuments({
             <span>More</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
+        <div className="border-t border-zinc-400 my-4" />
       </SidebarMenu>
     </SidebarGroup>
   )

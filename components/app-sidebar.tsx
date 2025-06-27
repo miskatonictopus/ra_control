@@ -87,17 +87,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <span className="sidebar-section-title pointer-events-none">
+              <span className="text-zinc-950 text-xs font-bold">
                 Mis Asignaturas
               </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          {asignaturas.map((asig) => (
+         {asignaturas.map((asig) => (
             <SidebarMenuItem key={asig.id}>
               <SidebarMenuButton asChild>
                 <a href="#">
-                <span className="code-section-title">{asig.id}</span> - <span className="name-section-title">{asig.nombre}</span>
+                <span className="text-xs text-zinc-500">{asig.id}</span> - <span className="text-xs text-zinc-950">{asig.nombre}</span>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -107,9 +107,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
   <SidebarMenuItem>
     <SidebarMenuButton asChild>
-      <span className="sidebar-section-title pointer-events-none">
-        Mis Cursos
-      </span>
+      <span className="text-zinc-950 text-xs font-bold">
+                Mis Cursos
+              </span>
     </SidebarMenuButton>
   </SidebarMenuItem>
 

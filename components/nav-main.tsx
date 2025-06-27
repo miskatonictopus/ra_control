@@ -1,6 +1,6 @@
 "use client"
 
-import { MailIcon, PlusCircleIcon, type LucideIcon } from "lucide-react"
+import { LayoutDashboard, HelpCircle,  type LucideIcon  } from "lucide-react"
 
 import { Button } from '@/components/ui/button'
 import {
@@ -22,9 +22,9 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <div className="px-4 py-2 font-semibold text-sm text-muted-foreground tracking-wide">
+      {/* <div className="px-4 py-2 font-semibold text-sm text-muted-foreground tracking-wide">
         CONTROL V.1
-      </div>
+      </div> */}
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
@@ -32,15 +32,15 @@ export function NavMain({
               tooltip="Quick Create"
               className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
             >
-              <PlusCircleIcon />
-              <span>Quick Create</span>
+              <LayoutDashboard />
+              <span className="text-xs">Panel de Control</span>
             </SidebarMenuButton>
             <Button
               size="icon"
               className="h-9 w-9 shrink-0 group-data-[collapsible=icon]:opacity-0"
               variant="outline"
             >
-              <MailIcon />
+              <HelpCircle />
               <span className="sr-only">Inbox</span>
             </Button>
           </SidebarMenuItem>
@@ -55,7 +55,9 @@ export function NavMain({
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
+        <div className="border-t border-zinc-400 my-4" />
       </SidebarGroupContent>
     </SidebarGroup>
+    
   )
 }
