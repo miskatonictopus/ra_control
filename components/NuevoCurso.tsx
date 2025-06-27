@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { InputWithLabel } from "@/components/input-with-label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { HelpCircle } from "lucide-react";
 
 interface Curso {
   acronimo: string
@@ -12,6 +13,12 @@ interface Curso {
   nivel: string
   grado: string
 }
+
+import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from "@/components/ui/hover-card";
 
 export function NuevoCurso() {
   const [acronimo, setAcronimo] = useState("")
@@ -43,9 +50,29 @@ export function NuevoCurso() {
   return (
     <div className="bg-zinc-950 flex items-start justify-center p-4">
       <div className="w-full max-w-2xl space-y-6">
-    <Card className="bg-zinc-900 border-zinc-700">
+    <Card className="bg-zinc-900 border-zinc-700 relative">
+    <HoverCard>
+            <HoverCardTrigger asChild>
+              <button className="absolute top-2 right-2 text-white hover:text-emerald-400">
+                <HelpCircle className="w-5 h-5" />
+              </button>
+            </HoverCardTrigger>
+            <HoverCardContent className="w-80 text-sm leading-snug">
+              <strong>¿Cómo añadir un nuevo curso?</strong>
+              <ul className="list-disc pl-4 mt-2">
+                <li>
+                  Introduce el <strong>Acrónimo</strong> oficial (ej: DAW).
+                </li>
+                <li>
+                  Introduce el nombre completo (ej: Diseño de Aplicacines Web)
+                </li>
+                <li>Selecciona el nivel o curso</li>
+                <li>Selecciona el grado (Medio) o (Superior)</li>
+              </ul>
+            </HoverCardContent>
+          </HoverCard>
       <CardHeader className="text-left">
-        <CardTitle className="text-xl font-bold text-white">Nuevo Curso</CardTitle>
+        <CardTitle className="text-xl font-bold text-white">2- Nuevo Curso</CardTitle>
         <CardDescription className="text-zinc-400">
           Añade un nuevo curso a tu colección local
         </CardDescription>

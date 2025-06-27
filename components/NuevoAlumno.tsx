@@ -8,10 +8,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { InputWithLabel } from "@/components/input-with-label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { HelpCircle } from "lucide-react";
 
 interface NuevoAlumnoProps {
     onGuardado?: () => void
   }
+
+  import {
+    HoverCard,
+    HoverCardTrigger,
+    HoverCardContent,
+  } from "@/components/ui/hover-card";
 
   export function NuevoAlumno({ onGuardado }: NuevoAlumnoProps) {
 
@@ -52,11 +59,36 @@ interface NuevoAlumnoProps {
   return (
     <div className="bg-zinc-950 flex items-start justify-center p-4">
       <div className="w-full max-w-2xl space-y-6">
-    <Card className="bg-zinc-900 border-zinc-700">
+    <Card className="bg-zinc-900 border-zinc-700 relative">
+    <HoverCard>
+            <HoverCardTrigger asChild>
+              <button className="absolute top-2 right-2 text-white hover:text-emerald-400">
+                <HelpCircle className="w-5 h-5" />
+              </button>
+            </HoverCardTrigger>
+            <HoverCardContent className="w-80 text-sm leading-snug">
+              <strong>¿Cómo añadir un nuevo Alumno?</strong>
+              <ul className="list-disc pl-4 mt-2">
+                <li>
+                 Introduce el Apellido
+                </li>
+                <li>
+                 Introuce el Nombre
+                </li>
+                <li>Selecciona el curso<br/><span className="text-rose-400">Ten en cuenta que tendrás que haber completado al menos con un curso el <strong>paso 2</strong> para poder asignar un curso al alumno y haber completado el <strong>paso 1</strong> con las asignaturas</span></li>
+                <li>
+                 Haz click sobre las asignaturas del alumno
+                </li>
+                <li>
+                 Guarda a tu alumno!
+                </li>
+              </ul>
+            </HoverCardContent>
+          </HoverCard>
       <CardHeader className="text-left">
-        <CardTitle className="text-xl font-bold text-white">Nuevo Alumno</CardTitle>
+        <CardTitle className="text-xl font-bold text-white">3- Nuevo Alumno</CardTitle>
         <CardDescription className="text-zinc-400">
-          Introduce los datos del alumno de forma segura
+          Introduce los datos del alumno
         </CardDescription>
       </CardHeader>
 
@@ -114,7 +146,7 @@ interface NuevoAlumnoProps {
           className="w-full bg-white hover:bg-emerald-400 text-black"
           disabled={!isFormValid}
         >
-          Guardar alumno cifrado
+          Guardar alumno
         </Button>
       </CardContent>
     </Card>

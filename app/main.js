@@ -9,6 +9,7 @@ const alumnosDir = path.join(dataDir, "alumnos");
 const cursosDir = path.join(dataDir, "cursos");
 const asignaturasDir = path.join(dataDir, "asignaturas");
 
+
 // Crear estructura si no existe
 fs.mkdirSync(alumnosDir, { recursive: true });
 fs.mkdirSync(cursosDir, { recursive: true });
