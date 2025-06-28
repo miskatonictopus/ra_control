@@ -2,7 +2,11 @@
   "id": "0612",
   "nombre": "Desarrollo web en entorno cliente",
   "creditos": "10",
-  "descripcion": "Duración total: 165h, Centro: 99h, Empresa: 66h",
+  "descripcion": {
+    "duracion": "165h",
+    "centro": "99h",
+    "empresa": "66h"
+  },
   "CE": [],
   "RA": [
     {

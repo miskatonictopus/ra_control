@@ -4,14 +4,15 @@ import * as React from "react"
 import { useMisCursos } from "@/hooks/useMisCursos"
 import { useMisAsignaturas } from "@/hooks/use-mis-asignaturas"
 import {
+  BookUser,
   BarChartIcon,
   ClipboardListIcon,
   DatabaseIcon,
   FileIcon,
   FolderIcon,
   HelpCircleIcon,
-  LayoutDashboardIcon,
-  ListIcon,
+  GraduationCap,
+  UsersRound,
   SearchIcon,
   SettingsIcon,
   UsersIcon,
@@ -40,9 +41,9 @@ const data = {
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
-    { title: "Dashboard", url: "#", icon: LayoutDashboardIcon },
-    { title: "Lifecycle", url: "#", icon: ListIcon },
-    { title: "Analytics", url: "#", icon: BarChartIcon },
+    { title: "Asignaturas", url: "/asignaturas", icon: BookUser },
+    { title: "Cursos", url: "#", icon: GraduationCap },
+    { title: "Alumnos", url: "#", icon: UsersRound },
     { title: "Projects", url: "#", icon: FolderIcon },
     { title: "Team", url: "#", icon: UsersIcon },
   ],

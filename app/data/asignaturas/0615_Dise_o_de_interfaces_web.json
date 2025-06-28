@@ -2,7 +2,11 @@
   "id": "0615",
   "nombre": "Diseño de interfaces web",
   "creditos": "10",
-  "descripcion": "Duración total: 132h, Centro: 66h, Empresa: 66h",
+  "descripcion": {
+    "duracion": "132h",
+    "centro": "66h",
+    "empresa": "66h"
+  },
   "CE": [],
   "RA": [
     {
