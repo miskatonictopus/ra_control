@@ -1,5 +1,8 @@
 "use client";
 
+
+import { PlusCircle } from "lucide-react"
+
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -188,7 +191,6 @@ export function NuevaAsignatura({
   const isFormValid = codigo.trim() && nombre.trim() && creditos.trim();
 
   return (
-    <div className="bg-zinc-950 flex items-start justify-center p-4">
       <div className="w-full max-w-2xl space-y-6">
         <Card className="bg-zinc-900 border-zinc-700 relative">
           <HoverCard>
@@ -211,8 +213,8 @@ export function NuevaAsignatura({
             </HoverCardContent>
           </HoverCard>
           <CardHeader className="text-left">
-            <CardTitle className="text-xl font-bold text-white">
-              1- Nueva Asignatura
+            <CardTitle className="text-xl font-bold text-white flex">
+            <PlusCircle className="w-6 h-6 text-white mr-2" />  Nueva Asignatura
             </CardTitle>
             <CardDescription className="text-zinc-400">
               Introduce el código de tu nueva asignatura y selecciónala
@@ -394,6 +396,5 @@ export function NuevaAsignatura({
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </div>
   );
 }
