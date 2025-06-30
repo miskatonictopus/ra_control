@@ -51,7 +51,7 @@ import {
 interface Asignatura {
   codigo: string;
   nombre: string;
-  ects: number;
+  creditos:number;
   duracion: string;
   centro_educativo: string;
   empresa: string;
@@ -96,12 +96,36 @@ export function NuevaAsignatura({
   const [mostrarAlertaNoExiste, setMostrarAlertaNoExiste] = useState(false);
   const asignaturasLocales = useMisAsignaturas();
 
-  useEffect(() => {
-    fetch(jsonURL)
-      .then((res) => res.json())
-      .then((data) => setAsignaturas(data))
-      .catch((err) => console.error("Error al cargar asignaturas:", err));
-  }, []);
+useEffect(() => {
+  fetch(jsonURL)
+    .then((res) => res.json())
+    .then((data) => {
+      const indexado: { [key: string]: Asignatura } = {};
+
+      data.forEach((a: any) => {
+        const codigo = a.id;
+        if (codigo) {
+          indexado[codigo] = {
+            ...a,
+            codigo, // renombrar correctamente
+            ects: a.ects ?? "", // por si falta
+            duracion: a.duracion ?? "",
+            centro_educativo: a.centro_educativo ?? "",
+            empresa: a.empresa ?? "",
+            CE: a.CE ?? [],
+            RA: a.RA ?? [],
+          };
+        } else {
+          console.warn("Asignatura sin id:", a);
+        }
+      });
+
+      console.log("🎯 Asignaturas indexadas:", indexado);
+      setAsignaturas(indexado);
+    })
+    .catch((err) => console.error("Error al cargar asignaturas:", err));
+}, []);
+
 
   useEffect(() => {
     if (codigo.length >= 2) {
@@ -137,10 +161,7 @@ export function NuevaAsignatura({
     if (asignatura) {
       setCodigo(codigo);
       setNombre(asignatura.nombre);
-      setCreditos(asignatura.ects.toString());
-      setDescripcion(
-        `Duración total: ${asignatura.duracion}, Centro: ${asignatura.centro_educativo}, Empresa: ${asignatura.empresa}`
-      );
+      setCreditos((asignatura.creditos ?? "1").toString());
     }
   };
 

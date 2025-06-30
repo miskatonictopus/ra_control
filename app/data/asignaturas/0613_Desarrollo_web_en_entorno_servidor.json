@@ -1,0 +1,331 @@
+{
+  "id": "0613",
+  "nombre": "Desarrollo web en entorno servidor",
+  "creditos": "13",
+  "descripcion": "",
+  "CE": [],
+  "RA": [
+    {
+      "codigo": "RA1",
+      "descripcion": "Selecciona las arquitecturas y tecnologías de programación web en entorno servidor, analizando sus capacidades y características propias.",
+      "CE": [
+        {
+          "codigo": "CE1.1",
+          "descripcion": "Caracteriza y diferencia los modelos de ejecución de código en el servidor y en el cliente web."
+        },
+        {
+          "codigo": "CE1.2",
+          "descripcion": "Reconoce las ventajas que proporciona la generación dinámica de páginas."
+        },
+        {
+          "codigo": "CE1.3",
+          "descripcion": "Identifica los mecanismos de ejecución de código en los servidores web."
+        },
+        {
+          "codigo": "CE1.4",
+          "descripcion": "Reconoce las funcionalidades que aportan los servidores de aplicaciones y su integración con los servidores web."
+        },
+        {
+          "codigo": "CE1.5",
+          "descripcion": "Identifica y caracteriza los principales lenguajes y tecnologías relacionados con la programación web en entorno servidor."
+        },
+        {
+          "codigo": "CE1.6",
+          "descripcion": "Verifica los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación en entorno servidor."
+        },
+        {
+          "codigo": "CE1.7",
+          "descripcion": "Reconoce y evalúa las herramientas y frameworks de programación en entorno servidor."
+        }
+      ]
+    },
+    {
+      "codigo": "RA2",
+      "descripcion": "Escribe sentencias ejecutables por un servidor web reconociendo y aplicando procedimientos de integración del código en lenguajes de marcas.",
+      "CE": [
+        {
+          "codigo": "CE2.1",
+          "descripcion": "Reconoce los mecanismos de generación de páginas web a partir de lenguajes de marcas con código embebido."
+        },
+        {
+          "codigo": "CE2.2",
+          "descripcion": "Identifica las principales tecnologías asociadas."
+        },
+        {
+          "codigo": "CE2.3",
+          "descripcion": "Utiliza etiquetas para la inclusión de código en el lenguaje de marcas."
+        },
+        {
+          "codigo": "CE2.4",
+          "descripcion": "Reconoce la sintaxis del lenguaje de programación que se debe utilizar."
+        },
+        {
+          "codigo": "CE2.5",
+          "descripcion": "Escribe sentencias simples y comprueba sus efectos en el documento resultante."
+        },
+        {
+          "codigo": "CE2.6",
+          "descripcion": "Utiliza directivas para modificar el comportamiento predeterminado."
+        },
+        {
+          "codigo": "CE2.7",
+          "descripcion": "Utiliza los distintos tipos de variables y operadores disponibles en el lenguaje."
+        },
+        {
+          "codigo": "CE2.8",
+          "descripcion": "Identifica los ámbitos de utilización de las variables."
+        },
+        {
+          "codigo": "CE2.9",
+          "descripcion": "Escribe bloques de sentencias embebidas en lenguajes de marcas, seleccionando y utilizando estructuras de programación."
+        }
+      ]
+    },
+    {
+      "codigo": "RA3",
+      "descripcion": "Utiliza estructuras de programación para el desarrollo de lógica de servidor.",
+      "CE": [
+        {
+          "codigo": "CE3.1",
+          "descripcion": "Utiliza mecanismos de decisión en la creación de bloques de sentencias."
+        },
+        {
+          "codigo": "CE3.2",
+          "descripcion": "Utiliza bucles y verifica su funcionamiento."
+        },
+        {
+          "codigo": "CE3.3",
+          "descripcion": "Utiliza matrices (arrays) para almacenar y recuperar conjuntos de datos."
+        },
+        {
+          "codigo": "CE3.4",
+          "descripcion": "Crea y utiliza funciones."
+        },
+        {
+          "codigo": "CE3.5",
+          "descripcion": "Utiliza formularios web para interactuar con el usuario del navegador web."
+        },
+        {
+          "codigo": "CE3.6",
+          "descripcion": "Emplea métodos para recuperar la información introducida en el formulario."
+        },
+        {
+          "codigo": "CE3.7",
+          "descripcion": "Añade comentarios al código."
+        }
+      ]
+    },
+    {
+      "codigo": "RA4",
+      "descripcion": "Desarrolla aplicaciones web embebidas en lenguajes de marcas analizando e incorporando funcionalidades según especificaciones.",
+      "CE": [
+        {
+          "codigo": "CE4.1",
+          "descripcion": "Identifica los mecanismos disponibles para el mantenimiento de la información relativa a un cliente web concreto y señala sus ventajas."
+        },
+        {
+          "codigo": "CE4.2",
+          "descripcion": "Utiliza mecanismos para mantener el estado de las aplicaciones web."
+        },
+        {
+          "codigo": "CE4.3",
+          "descripcion": "Utiliza mecanismos para almacenar información en el cliente web y recuperar su contenido."
+        },
+        {
+          "codigo": "CE4.4",
+          "descripcion": "Identifica y caracteriza los mecanismos disponibles para la autenticación de usuarios."
+        },
+        {
+          "codigo": "CE4.5",
+          "descripcion": "Escribe aplicaciones que integren mecanismos de autenticación de usuarios."
+        },
+        {
+          "codigo": "CE4.6",
+          "descripcion": "Utiliza herramientas y entornos para facilitar la programación, prueba y depuración del código."
+        }
+      ]
+    },
+    {
+      "codigo": "RA5",
+      "descripcion": "Desarrolla aplicaciones web identificando y aplicando mecanismos para separar el código de presentación de la lógica de negocio.",
+      "CE": [
+        {
+          "codigo": "CE5.1",
+          "descripcion": "Identifica las ventajas de separar la lógica de negocio de los aspectos de presentación de la aplicación."
+        },
+        {
+          "codigo": "CE5.2",
+          "descripcion": "Analiza y utiliza mecanismos y frameworks que permiten realizar esta separación y sus principales características."
+        },
+        {
+          "codigo": "CE5.3",
+          "descripcion": "Utiliza objetos y controles en el servidor para generar el aspecto visual de la aplicación web en el cliente."
+        },
+        {
+          "codigo": "CE5.4",
+          "descripcion": "Utiliza formularios generados de forma dinámica para responder a los eventos de la aplicación web."
+        },
+        {
+          "codigo": "CE5.5",
+          "descripcion": "Identifica y aplica los parámetros relativos a la configuración de la aplicación web."
+        },
+        {
+          "codigo": "CE5.6",
+          "descripcion": "Escribe aplicaciones web con mantenimiento de estado y separación de la lógica de negocio."
+        },
+        {
+          "codigo": "CE5.7",
+          "descripcion": "Aplica los principios y patrones de diseño de la programación orientada a objetos."
+        },
+        {
+          "codigo": "CE5.8",
+          "descripcion": "Prueba y documenta el código."
+        }
+      ]
+    },
+    {
+      "codigo": "RA6",
+      "descripcion": "Desarrolla aplicaciones web de acceso a almacenes de datos, aplicando medidas para mantener la seguridad y la integridad de la información.",
+      "CE": [
+        {
+          "codigo": "CE6.1",
+          "descripcion": "Analiza las tecnologías que permiten el acceso mediante programación a la información disponible en almacenes de datos."
+        },
+        {
+          "codigo": "CE6.2",
+          "descripcion": "Crea aplicaciones que establezcan conexiones con bases de datos."
+        },
+        {
+          "codigo": "CE6.3",
+          "descripcion": "Recupera información almacenada en bases de datos."
+        },
+        {
+          "codigo": "CE6.4",
+          "descripcion": "Publica en aplicaciones web la información recuperada."
+        },
+        {
+          "codigo": "CE6.5",
+          "descripcion": "Utiliza conjuntos de datos para almacenar la información."
+        },
+        {
+          "codigo": "CE6.6",
+          "descripcion": "Crea aplicaciones web que permitan la actualización y eliminación de información disponible en una base de datos."
+        },
+        {
+          "codigo": "CE6.7",
+          "descripcion": "Prueba y documenta las aplicaciones web."
+        }
+      ]
+    },
+    {
+      "codigo": "RA7",
+      "descripcion": "Desarrolla servicios web reutilizables y accesibles mediante protocolos web, verificando su funcionamiento.",
+      "CE": [
+        {
+          "codigo": "CE7.1",
+          "descripcion": "Reconoce las características propias y el ámbito de aplicación de los servicios web."
+        },
+        {
+          "codigo": "CE7.2",
+          "descripcion": "Reconoce las ventajas de utilizar servicios web para proporcionar acceso a funcionalidades incorporadas en la lógica de negocio de una aplicación."
+        },
+        {
+          "codigo": "CE7.3",
+          "descripcion": "Identifica las tecnologías y los protocolos implicados en el consumo de servicios web."
+        },
+        {
+          "codigo": "CE7.4",
+          "descripcion": "Utiliza los estándares y arquitecturas más difundidos e implicados en el desarrollo de servicios web."
+        },
+        {
+          "codigo": "CE7.5",
+          "descripcion": "Programa un servicio web."
+        },
+        {
+          "codigo": "CE7.6",
+          "descripcion": "Verifica el funcionamiento del servicio web."
+        },
+        {
+          "codigo": "CE7.7",
+          "descripcion": "Consume el servicio web."
+        },
+        {
+          "codigo": "CE7.8",
+          "descripcion": "Documenta un servicio web."
+        }
+      ]
+    },
+    {
+      "codigo": "RA8",
+      "descripcion": "Genera páginas web dinámicas analizando y utilizando tecnologías y frameworks del servidor web que añaden código al lenguaje de marcas.",
+      "CE": [
+        {
+          "codigo": "CE8.1",
+          "descripcion": "Identifica las diferencias entre la ejecución de código en el servidor y en el cliente web."
+        },
+        {
+          "codigo": "CE8.2",
+          "descripcion": "Reconoce las ventajas de unir ambas tecnologías en el proceso de desarrollo de programas."
+        },
+        {
+          "codigo": "CE8.3",
+          "descripcion": "Identifica las tecnologías y los frameworks relacionados con la generación por parte del servidor de páginas web con scripts embebidos."
+        },
+        {
+          "codigo": "CE8.4",
+          "descripcion": "Utiliza estas tecnologías y frameworks para generar páginas web que incluyan interacción con el usuario."
+        },
+        {
+          "codigo": "CE8.5",
+          "descripcion": "Utiliza estas tecnologías y frameworks para generar páginas web que incluyan verificación de formularios."
+        },
+        {
+          "codigo": "CE8.6",
+          "descripcion": "Utiliza estas tecnologías y frameworks para generar páginas web que incluyan modificación dinámica de su contenido y su estructura."
+        },
+        {
+          "codigo": "CE8.7",
+          "descripcion": "Aplica estas tecnologías y frameworks en la programación de aplicaciones web."
+        }
+      ]
+    },
+    {
+      "codigo": "RA9",
+      "descripcion": "Desarrolla aplicaciones web híbridas seleccionando y utilizando tecnologías, frameworks de servidor y repositorios heterogéneos de información.",
+      "CE": [
+        {
+          "codigo": "CE9.1",
+          "descripcion": "Reconoce las ventajas que proporciona la reutilización de código y el aprovechamiento de información ya existente."
+        },
+        {
+          "codigo": "CE9.2",
+          "descripcion": "Identifica tecnologías y frameworks aplicables en la creación de aplicaciones web híbridas."
+        },
+        {
+          "codigo": "CE9.3",
+          "descripcion": "Crea una aplicación web que recupere y procese depósitos de información ya existentes."
+        },
+        {
+          "codigo": "CE9.4",
+          "descripcion": "Crea depósitos específicos a partir de información existente en almacenes de información."
+        },
+        {
+          "codigo": "CE9.5",
+          "descripcion": "Utiliza librerías de código y frameworks para incorporar funcionalidades específicas a una aplicación web."
+        },
+        {
+          "codigo": "CE9.6",
+          "descripcion": "Programa servicios y aplicaciones web utilizando como base información y código generados por terceros."
+        },
+        {
+          "codigo": "CE9.7",
+          "descripcion": "Analiza y utiliza librerías de código relacionadas con Big Data e inteligencia de negocio, para incorporar análisis e inteligencia de datos provenientes de repositorios."
+        },
+        {
+          "codigo": "CE9.8",
+          "descripcion": "Prueba, depura y documenta las aplicaciones generadas."
+        }
+      ]
+    }
+  ]
+}
