@@ -2,7 +2,11 @@
   "id": "0613",
   "nombre": "Desarrollo web en entorno servidor",
   "creditos": "13",
-  "descripcion": "",
+  "descripcion": {
+    "duracion": "165h",
+    "centro": "99h",
+    "empresa": "66h"
+  },
   "CE": [],
   "RA": [
     {
