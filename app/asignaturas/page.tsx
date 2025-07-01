@@ -2,21 +2,10 @@
 
 import { Separator } from "@/components/ui/separator"
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { IconWithTooltipDialog } from "@/components/IconWithTooltipDialog"
+import { IconWithTooltip } from "@/components/IconWithTooltip"
 
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+
 import { Eye, SquarePen } from "lucide-react"
 
 import { Header } from "@/components/Header"
@@ -100,96 +89,82 @@ export default function PaginaAsignaturas() {
                   </div>
                 )}
 
-                {/* Botón con tooltip y modal */}
-                <TooltipProvider>
-                  <Tooltip>
-                    <Dialog>
-                      <TooltipTrigger asChild>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="mt-4 border-zinc-600 text-zinc-950 hover:bg-zinc-800 hover:text-white"
-                          >
-                            <Eye className="w-16 h-16 mr-1" />
-                          </Button>
-                        </DialogTrigger>
-                      </TooltipTrigger>
 
-                      <TooltipContent>
-                        <p>Ver detalles</p>
-                      </TooltipContent>
+<IconWithTooltipDialog
+  tooltip="Ver detalles"
+  title={asig.nombre}
+  buttonVariant="outline"
+  buttonSize="sm"
+  buttonClassName="mt-4 border-zinc-600 text-zinc-950 hover:bg-zinc-800 hover:text-white"
+  content={
+    <div className="mt-4 space-y-6 text-sm">
+      <div className="flex items-center flex-wrap gap-x-4">
+        {[
+          { label: "Código", value: asig.id },
+          { label: "Horas Totales", value: asig.descripcion?.duracion ?? "—" },
+          { label: "Centro", value: asig.descripcion?.centro ?? "—" },
+          { label: "Empresa", value: asig.descripcion?.empresa ?? "—" },
+          { label: "RA", value: asig.RA?.length ?? 0 },
+          {
+            label: "CE Totales",
+            value: asig.RA?.reduce((total, ra) => total + (ra.CE?.length || 0), 0),
+          },
+        ].map((item, index, arr) => (
+          <div key={index} className="flex items-center">
+            <span className="font-bold text-zinc-400 mr-1">{item.label}:</span>
+            <span className="font-normal text-white">{item.value}</span>
+            {index < arr.length - 1 && (
+              <Separator orientation="vertical" className="mx-2 h-4 bg-zinc-600" />
+            )}
+          </div>
+        ))}
+      </div>
 
-                      <DialogContent className="bg-zinc-900 border border-zinc-700 text-white max-w-3xl max-h-[90vh] overflow-y-auto">
-                        <DialogHeader>
-                          <DialogTitle>{asig.nombre}</DialogTitle>
-                        </DialogHeader>
+      {asig.RA && (
+        <div>
+          <h3 className="text-base font-semibold text-white mb-2">Resultados de Aprendizaje (RA)</h3>
+          <div className="space-y-4">
+            {asig.RA.map((ra, index) => (
+              <div key={index} className="border border-zinc-700 rounded-md p-4">
+                <p className="text-white font-medium mb-2">
+                  <span className="text-zinc-400 mr-1">RA{index + 1}:</span>
+                  {ra.descripcion}
+                </p>
+                <Separator orientation="horizontal" className="my-2 bg-zinc-600" />
+                {ra.CE && ra.CE.length > 0 && (
+                  <ul className="list-disc list-inside space-y-1 text-sm text-zinc-300">
+                    {ra.CE.map((ce, idx) => (
+                      <li key={idx}>
+                        <span className="text-zinc-400 font-medium mr-1">
+                          CE{index + 1}.{idx + 1}:
+                        </span>
+                        {ce.descripcion}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  }
+>
+  <Eye className="w-16 h-16 mr-1" />
+</IconWithTooltipDialog>
 
-                        <div className="mt-4 space-y-6 text-sm">
-                          <div className="flex items-center flex-wrap gap-x-4">
-                            {[
-                              { label: "Código", value: asig.id },
-                              { label: "Horas Totales", value: asig.descripcion?.duracion ?? "—" },
-                              { label: "Centro", value: asig.descripcion?.centro ?? "—" },
-                              { label: "Empresa", value: asig.descripcion?.empresa ?? "—" },
-                              { label: "RA", value: asig.RA?.length ?? 0 },
-                              {
-                                label: "CE Totales",
-                                value: asig.RA?.reduce((total, ra) => total + (ra.CE?.length || 0), 0),
-                              },
-                            ].map((item, index, arr) => (
-                              <div key={index} className="flex items-center">
-                                <span className="font-bold text-zinc-400 mr-1">{item.label}:</span>
-                                <span className="font-normal text-white">{item.value}</span>
-                                {index < arr.length - 1 && (
-                                  <Separator orientation="vertical" className="mx-2 h-4 bg-zinc-600" />
-                                )}
-                              </div>
-                            ))}
-                          </div>
-
-                          {asig.RA && (
-                            <div>
-                              <h3 className="text-base font-semibold text-white mb-2">Resultados de Aprendizaje (RA)</h3>
-                              <div className="space-y-4">
-                                {asig.RA.map((ra, index) => (
-                                  <div key={index} className="border border-zinc-700 rounded-md p-4">
-                                    <p className="text-white font-medium mb-2">
-                                      <span className="text-zinc-400 mr-1">RA{index + 1}:</span>
-                                      {ra.descripcion}
-                                    </p>
-                                    <Separator orientation="horizontal" className="my-2 bg-zinc-600" />
-                                    {ra.CE && ra.CE.length > 0 && (
-                                      <ul className="list-disc list-inside space-y-1 text-sm text-zinc-300">
-                                        {ra.CE.map((ce, idx) => (
-                                          <li key={idx}>
-                                            <span className="text-zinc-400 font-medium mr-1">
-                                              CE{index + 1}.{idx + 1}:
-                                            </span>
-                                            {ce.descripcion}
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  </Tooltip>
-                </TooltipProvider>
 
                 {/* Botón editar sin tooltip */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="mt-4 ml-2 border-zinc-600 text-zinc-950 hover:bg-zinc-800 hover:text-white"
-                >
-                  <SquarePen className="w-16 h-16 mr-1" />
-                </Button>
+                <IconWithTooltip
+                tooltip="Editar asignatura"
+                buttonVariant="outline"
+                buttonSize="sm"
+                buttonClassName="mt-4 ml-2 border-zinc-600 text-zinc-950 hover:bg-zinc-800 hover:text-white"
+                onClick={() => console.log("Editar clicked")}
+              >
+                <SquarePen className="w-16 h-16 mr-1" />
+              </IconWithTooltip>
               </CardContent>
             </Card>
           ))}
