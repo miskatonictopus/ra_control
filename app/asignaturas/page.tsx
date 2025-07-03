@@ -1,28 +1,62 @@
 "use client"
 
-import { Separator } from "@/components/ui/separator"
+import { useEffect, useState } from "react"
+import { useSnapshot } from "valtio"
+import { state } from "@/lib/store"
 
+import { DialogEditarAsignatura } from "@/components/DialogEditarAsignatura"
+
+import { Separator } from "@/components/ui/separator"
 import { IconWithTooltipDialog } from "@/components/IconWithTooltipDialog"
 import { IconWithTooltip } from "@/components/IconWithTooltip"
-
-
 import { Eye, SquarePen } from "lucide-react"
-
 import { Header } from "@/components/Header"
-
-import { useState } from "react"
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useMisAsignaturas } from "@/hooks/use-mis-asignaturas"
 import { NuevaAsignatura } from "@/components/nueva-asignatura"
 
+
 export default function PaginaAsignaturas() {
-  const asignaturas = useMisAsignaturas()
+  const snap = useSnapshot(state)
+  const asignaturas = snap.asignaturas
   const [isLoading, setIsLoading] = useState(false)
+
+  // 🚀 Cargar asignaturas al montar
+useEffect(() => {
+  const cargarAsignaturas = async () => {
+    try {
+      const asignaturasLocales = await window.electronAPI.leerAsignaturasLocales()
+
+      const asignaturasValidas = (asignaturasLocales as any[]).filter(
+        (a): a is { id: string; nombre: string } =>
+          typeof a.id === "string" && typeof a.nombre === "string"
+      )
+
+      // ✅ Aquí los tratamos como `any` para acceder a `descripcion`, `RA`, `filename`, etc.
+      state.asignaturas = (asignaturasValidas as any[]).map((a) => ({
+        id: a.id,
+        nombre: a.nombre,
+        descripcion: a.descripcion ?? {
+          duracion: "",
+          centro: "",
+          empresa: ""
+        },
+        RA: a.RA ?? [],
+        filename: a.filename ?? `${a.id ?? "sin_id"}.json`,
+      }))
+    } catch (error) {
+      console.error("❌ Error cargando asignaturas:", error)
+      state.asignaturas = []
+    }
+  }
+
+  cargarAsignaturas()
+}, [])
+
 
   const handleCambiar = () => {
     console.log("Cambiar clicked")
@@ -35,8 +69,25 @@ export default function PaginaAsignaturas() {
     descripcion: string
   }) => {
     setIsLoading(true)
-    console.log("Datos confirmados:", datos)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+
+    const nuevaAsignatura = {
+      id: datos.codigo,
+      nombre: datos.nombre,
+      descripcion: {
+        duracion: datos.creditos,
+        centro: datos.descripcion.split(",")[0]?.trim() ?? "",
+        empresa: datos.descripcion.split(",")[1]?.trim() ?? "",
+      },
+      RA: [],
+      filename: `${datos.codigo}.json`,
+    }
+
+    // Añadir al estado global reactivo
+    state.asignaturas.push(nuevaAsignatura)
+
+    // Guardar archivo localmente
+    await window.electronAPI.guardarAsignatura(nuevaAsignatura.filename, nuevaAsignatura)
+
     setIsLoading(false)
   }
 
@@ -89,82 +140,71 @@ export default function PaginaAsignaturas() {
                   </div>
                 )}
 
+                <IconWithTooltipDialog
+                  tooltip="Ver detalles"
+                  title={asig.nombre}
+                  buttonVariant="outline"
+                  buttonSize="sm"
+                  buttonClassName="mt-4 border-zinc-600 text-zinc-950 hover:bg-zinc-800 hover:text-white"
+                  content={
+                    <div className="mt-4 space-y-6 text-sm">
+                      <div className="flex items-center flex-wrap gap-x-4">
+                        {[
+                          { label: "Código", value: asig.id },
+                          { label: "Horas Totales", value: asig.descripcion?.duracion ?? "—" },
+                          { label: "Centro", value: asig.descripcion?.centro ?? "—" },
+                          { label: "Empresa", value: asig.descripcion?.empresa ?? "—" },
+                          { label: "RA", value: asig.RA?.length ?? 0 },
+                          {
+                            label: "CE Totales",
+                            value: asig.RA?.reduce((total, ra) => total + (ra.CE?.length || 0), 0),
+                          },
+                        ].map((item, index, arr) => (
+                          <div key={index} className="flex items-center">
+                            <span className="font-bold text-zinc-400 mr-1">{item.label}:</span>
+                            <span className="font-normal text-white">{item.value}</span>
+                            {index < arr.length - 1 && (
+                              <Separator orientation="vertical" className="mx-2 h-4 bg-zinc-600" />
+                            )}
+                          </div>
+                        ))}
+                      </div>
 
-<IconWithTooltipDialog
-  tooltip="Ver detalles"
-  title={asig.nombre}
-  buttonVariant="outline"
-  buttonSize="sm"
-  buttonClassName="mt-4 border-zinc-600 text-zinc-950 hover:bg-zinc-800 hover:text-white"
-  content={
-    <div className="mt-4 space-y-6 text-sm">
-      <div className="flex items-center flex-wrap gap-x-4">
-        {[
-          { label: "Código", value: asig.id },
-          { label: "Horas Totales", value: asig.descripcion?.duracion ?? "—" },
-          { label: "Centro", value: asig.descripcion?.centro ?? "—" },
-          { label: "Empresa", value: asig.descripcion?.empresa ?? "—" },
-          { label: "RA", value: asig.RA?.length ?? 0 },
-          {
-            label: "CE Totales",
-            value: asig.RA?.reduce((total, ra) => total + (ra.CE?.length || 0), 0),
-          },
-        ].map((item, index, arr) => (
-          <div key={index} className="flex items-center">
-            <span className="font-bold text-zinc-400 mr-1">{item.label}:</span>
-            <span className="font-normal text-white">{item.value}</span>
-            {index < arr.length - 1 && (
-              <Separator orientation="vertical" className="mx-2 h-4 bg-zinc-600" />
-            )}
-          </div>
-        ))}
-      </div>
+                      {asig.RA && (
+                        <div>
+                          <h3 className="text-base font-semibold text-white mb-2">Resultados de Aprendizaje (RA)</h3>
+                          <div className="space-y-4">
+                            {asig.RA.map((ra, index) => (
+                              <div key={index} className="border border-zinc-700 rounded-md p-4">
+                                <p className="text-white font-medium mb-2">
+                                  <span className="text-zinc-400 mr-1">RA{index + 1}:</span>
+                                  {ra.descripcion}
+                                </p>
+                                <Separator orientation="horizontal" className="my-2 bg-zinc-600" />
+                                {ra.CE && ra.CE.length > 0 && (
+                                  <ul className="list-disc list-inside space-y-1 text-sm text-zinc-300">
+                                    {ra.CE.map((ce, idx) => (
+                                      <li key={idx}>
+                                        <span className="text-zinc-400 font-medium mr-1">
+                                          CE{index + 1}.{idx + 1}:
+                                        </span>
+                                        {ce.descripcion}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  }
+                >
+                  <Eye className="w-16 h-16 mr-1" />
+                </IconWithTooltipDialog>
 
-      {asig.RA && (
-        <div>
-          <h3 className="text-base font-semibold text-white mb-2">Resultados de Aprendizaje (RA)</h3>
-          <div className="space-y-4">
-            {asig.RA.map((ra, index) => (
-              <div key={index} className="border border-zinc-700 rounded-md p-4">
-                <p className="text-white font-medium mb-2">
-                  <span className="text-zinc-400 mr-1">RA{index + 1}:</span>
-                  {ra.descripcion}
-                </p>
-                <Separator orientation="horizontal" className="my-2 bg-zinc-600" />
-                {ra.CE && ra.CE.length > 0 && (
-                  <ul className="list-disc list-inside space-y-1 text-sm text-zinc-300">
-                    {ra.CE.map((ce, idx) => (
-                      <li key={idx}>
-                        <span className="text-zinc-400 font-medium mr-1">
-                          CE{index + 1}.{idx + 1}:
-                        </span>
-                        {ce.descripcion}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  }
->
-  <Eye className="w-16 h-16 mr-1" />
-</IconWithTooltipDialog>
-
-
-                {/* Botón editar sin tooltip */}
-                <IconWithTooltip
-                tooltip="Editar asignatura"
-                buttonVariant="outline"
-                buttonSize="sm"
-                buttonClassName="mt-4 ml-2 border-zinc-600 text-zinc-950 hover:bg-zinc-800 hover:text-white"
-                onClick={() => console.log("Editar clicked")}
-              >
-                <SquarePen className="w-16 h-16 mr-1" />
-              </IconWithTooltip>
+                <DialogEditarAsignatura asignatura={asig} />
               </CardContent>
             </Card>
           ))}
