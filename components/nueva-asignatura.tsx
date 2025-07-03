@@ -81,9 +81,9 @@ export function NuevaAsignatura({
   const [nombre, setNombre] = useState("");
   const [creditos, setCreditos] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [asignaturas, setAsignaturas] = useState<{ [key: string]: Asignatura }>(
+  const [asignaturas, setAsignaturas] = useState<{ [key: string]: Asignatura }>({});
     {}
-  );
+  ;
   const [coincidencias, setCoincidencias] = useState<[string, Asignatura][]>(
     []
   );
@@ -165,8 +165,9 @@ useEffect(() => {
     }
   };
 
-  const guardarAsignaturaLocal = async () => {
-    const filename = `${codigo}_${nombre}`.replace(/[^\w\-]/gi, "_") + ".json";
+ const guardarAsignaturaLocal = async () => {
+  try {
+    const filename = `${codigo}.json`;
 
     const datos = {
       id: codigo,
@@ -177,16 +178,18 @@ useEffect(() => {
       RA: asignaturas[codigo]?.RA || [],
     };
 
-    try {
-      console.log("🔄 Enviando datos a Electron...");
-      const res = await window.electronAPI.guardarAsignatura(filename, datos);
-      console.log("✅ Asignatura guardada correctamente:", filename);
-      alert("Asignatura guardada correctamente en la aplicación");
-    } catch (error) {
-      console.error("❌ Error al guardar asignatura:", error);
-      alert("Error al guardar asignatura (ver consola)");
-    }
-  };
+    console.log("💾 Guardando datos en:", filename);
+    await window.electronAPI.guardarAsignatura(filename, datos);
+    console.log("✅ Asignatura guardada correctamente");
+    alert("Asignatura guardada correctamente en la aplicación");
+  } catch (error) {
+    console.error("❌ Error al guardar asignatura:", error);
+    alert("Error al guardar asignatura (ver consola)");
+  }
+};
+
+
+
 
   const handleConfirmar = () => {
     const yaRegistrada = asignaturasLocales.some((a) => a.id === codigo);

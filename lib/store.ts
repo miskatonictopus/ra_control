@@ -11,7 +11,7 @@ export type Asignatura = {
   nombre: string
   descripcion?: Descripcion
   RA?: RA[]
-  filename?: string
+  CE?: CE[]          // por si no estaba
 }
 
 // Estado global reactivo
