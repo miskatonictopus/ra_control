@@ -44,7 +44,7 @@ export function DialogEditarAsignaturaFlow({ asignatura }: { asignatura: any }) 
       <DialogAdvertencia
         open={mostrarAdvertencia}
         titulo="Modificar RA y CE"
-        descripcion="⚠️ Estás a punto de modificar los Resultados de Aprendizaje (RA) y los Criterios de Evaluación (CE). Esta acción puede afectar a datos futuros como notas, combinaciones y resultados. Asegúrate de saber lo que haces."
+        descripcion="Estás a punto de modificar los Resultados de Aprendizaje (RA) y los Criterios de Evaluación (CE). Esta acción puede afectar a datos futuros como notas, combinaciones y resultados. Asegúrate de saber lo que haces."
         onCancelar={cerrarTodo}
         onAceptar={() => {
           setMostrarAdvertencia(false)

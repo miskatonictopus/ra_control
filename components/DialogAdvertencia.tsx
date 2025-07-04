@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 
+import { AlertTriangle } from "lucide-react"
+
 // 1. Primer Modal: Advertencia
 export function DialogAdvertencia({
   open,
@@ -30,19 +32,21 @@ export function DialogAdvertencia({
 }) {
   return (
     <Dialog open={open} onOpenChange={onCancelar}>
-      <DialogContent className="bg-zinc-900 border border-zinc-700 text-white">
-        <DialogHeader>
-          <DialogTitle>{titulo}</DialogTitle>
-          <DialogDescription className="text-zinc-400">
-            {descripcion}
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter className="mt-4">
-          <Button variant="secondary" onClick={onCancelar}>Cancelar</Button>
-          <Button onClick={onAceptar}>Entiendo el riesgo</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+  <DialogContent className="bg-zinc-900 border border-zinc-700 text-white pt-6">
+    <DialogHeader>
+      <AlertTriangle className="w-10 h-10 text-red-500 shadow-lg animate-bounce mx-auto" />
+      <DialogTitle>{titulo}</DialogTitle>
+      <DialogDescription className="text-zinc-400">
+        {descripcion}
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter className="mt-4">
+      <Button variant="secondary" onClick={onCancelar}>Cancelar</Button>
+      <Button onClick={onAceptar}>Entiendo el riesgo</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
   )
 }
 

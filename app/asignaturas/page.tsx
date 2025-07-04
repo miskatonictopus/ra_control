@@ -97,9 +97,9 @@ useEffect(() => {
       <main className="flex-1 p-6 overflow-y-auto">
         <h1 className="text-2xl font-bold mb-6">Mis Asignaturas</h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="flex overflow-x-auto gap-6">
           {asignaturas.map((asig) => (
-            <Card key={asig.id} className="bg-zinc-900 border-zinc-700">
+            <Card key={asig.id} className="w-[375px] shrink-0 bg-zinc-900 border border-zinc-700">
               <CardHeader className="pt-2 pb-0 h-[6.5rem]">
                 <CardTitle className="text-white text-xl font-semibold leading-snug pt-4">
                   {asig.nombre}

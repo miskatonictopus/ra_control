@@ -11,7 +11,7 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <div className="flex bg-zinc-950 text-white w-screen h-screen overflow-hidden">
+      <div className="flex bg-zinc-950 text-white w-screen h-screen overflow-y-hidden overflow-x-auto">
         <AppSidebar />
         <main className="flex flex-1 flex-col overflow-y-auto">
           {/* 👇 Añadimos el Header aquí */}
