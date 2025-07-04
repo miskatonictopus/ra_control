@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useSnapshot } from "valtio"
 import { state } from "@/lib/store"
 
-import { DialogEditarAsignatura } from "@/components/DialogEditarAsignatura"
+import { DialogEditarAsignaturaFlow } from "@/components/DialogEditarAsignaturaFlow"
 
 import { Separator } from "@/components/ui/separator"
 import { IconWithTooltipDialog } from "@/components/IconWithTooltipDialog"
@@ -204,7 +204,7 @@ useEffect(() => {
                   <Eye className="w-16 h-16 mr-1" />
                 </IconWithTooltipDialog>
 
-                <DialogEditarAsignatura asignatura={asig} />
+                <DialogEditarAsignaturaFlow asignatura={asig} />
               </CardContent>
             </Card>
           ))}

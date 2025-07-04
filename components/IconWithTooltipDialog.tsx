@@ -39,13 +39,13 @@ export function IconWithTooltipDialog({
 
   return (
     <TooltipProvider>
-      <Tooltip>
+      <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
           <Button
             variant={buttonVariant}
             size={buttonSize}
             className={buttonClassName}
-            onClick={() => setOpen(true)} // <-- Abre el diálogo
+            onClick={() => setOpen(true)}
           >
             {children}
           </Button>
