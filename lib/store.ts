@@ -11,10 +11,20 @@ export type Asignatura = {
   nombre: string
   descripcion?: Descripcion
   RA?: RA[]
-  CE?: CE[]          // por si no estaba
+  CE?: CE[]   
 }
+
+export type Curso = {
+  acronimo: string
+  nombre: string
+  nivel: string
+  grado: string
+}
+
 
 // Estado global reactivo
 export const state = proxy({
   asignaturas: [] as Asignatura[],
+  cursos: [] as Curso[],
 })
+

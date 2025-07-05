@@ -7,11 +7,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   leerAsignaturasLocales: () =>
     ipcRenderer.invoke("leer-asignaturas-locales"),
 
-  guardarCurso: (filename, data) =>
-    ipcRenderer.invoke("guardar-curso-json", filename, data),
+  guardarCurso: (data) => ipcRenderer.invoke("guardar-curso", data),
 
-  leerCursosLocales: () =>
-    ipcRenderer.invoke("leer-cursos-locales"),
+  leerCursosLocales: () => ipcRenderer.invoke("leer-cursos-locales"),
 
   guardarAlumno: (data) =>
     ipcRenderer.invoke("guardar-alumno", data),
@@ -20,3 +18,4 @@ contextBridge.exposeInMainWorld("electronAPI", {
 })
 
 console.log("✅ PRELOAD EJECUTADO");
+

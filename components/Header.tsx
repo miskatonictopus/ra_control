@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 
@@ -10,8 +11,12 @@ export function Header() {
       <h1 className="text-xl font-bold text-white">Control V-1</h1>
 
       <nav className="flex items-center gap-4">
-        <Button variant="ghost" className="text-white hover:bg-zinc-800">Cursos</Button>
-        <Button variant="ghost" className="text-white hover:bg-zinc-800">Asignaturas</Button>
+        <Button variant="ghost" className="text-white hover:bg-zinc-800">
+        <Link href="/cursos">Cursos</Link>
+        </Button>
+        <Button variant="ghost" className="text-white hover:bg-zinc-800">
+        <Link href="/asignaturas">Asignaturas</Link>
+        </Button>
         <Button variant="ghost" className="text-white hover:bg-zinc-800">Alumnos</Button>
         <Button variant="ghost" className="text-white hover:bg-zinc-800">Actividades</Button>
 

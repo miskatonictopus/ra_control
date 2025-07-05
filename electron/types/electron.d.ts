@@ -3,14 +3,22 @@ export {}
 
 declare global {
   interface Window {
-    electron: {
-      ipcRenderer: {
-        invoke(channel: string, ...args: any[]): Promise<any>
-      }
-    }
     electronAPI: ElectronAPI
   }
+
   interface ElectronAPI {
     guardarAsignatura: (filename: string, data: any) => Promise<void>
+    leerAsignaturasLocales: () => Promise<any[]>
+
+    guardarCurso: (data: {
+      acronimo: string
+      nombre: string
+      nivel: string
+      grado: string
+    }) => Promise<void>
+
+    leerCursosLocales: () => Promise<any[]>
+    guardarAlumno: (data: any) => Promise<void>
+    leerAlumnos: () => Promise<any[]>
   }
 }

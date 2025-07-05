@@ -94,15 +94,34 @@ ipcMain.handle("leer-asignaturas-locales", async () => {
 // 🏫 CURSOS
 // =======================
 
-ipcMain.handle("guardar-curso-json", async (event, filename, data) => {
-  const filePath = path.join(cursosDir, filename);
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
-  console.log("✅ Curso guardado en:", filePath);
-});
+ipcMain.handle("guardar-curso", async (event, data) => {
+  const cursosDir = path.join(__dirname, "data", "cursos")
+  fs.mkdirSync(cursosDir, { recursive: true })
+
+  const filename = `${data.nombre}.json`
+  const filePath = path.join(cursosDir, filename)
+
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8")
+
+  console.log("✅ Curso guardado en:", filePath)
+  return true
+})
+
 
 ipcMain.handle("leer-cursos-locales", async () => {
-  return leerJSONsEnDir(cursosDir);
-});
+  const cursosDir = path.join(__dirname, "data", "cursos")
+  fs.mkdirSync(cursosDir, { recursive: true })
+
+  const archivos = fs.readdirSync(cursosDir)
+  const cursos = archivos
+    .filter((archivo) => archivo.endsWith(".json"))
+    .map((archivo) => {
+      const contenido = fs.readFileSync(path.join(cursosDir, archivo), "utf-8")
+      return JSON.parse(contenido)
+    })
+
+  return cursos
+})
 
 // =======================
 // 🧑‍🎓 ALUMNOS (cifrados)
