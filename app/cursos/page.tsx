@@ -7,13 +7,23 @@ import { state } from "@/lib/store"
 import { Header } from "@/components/Header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { IconWithTooltipDialog } from "@/components/IconWithTooltipDialog"
-import { Eye } from "lucide-react"
+import { Eye, PlusCircle } from "lucide-react"
 import { NuevoCurso } from "@/components/nuevo-curso"
+import { toast } from "sonner"
+
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 export default function PaginaCursos() {
   const snap = useSnapshot(state)
   const cursos = snap.cursos
   const [isLoading, setIsLoading] = useState(false)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const cargarCursos = async () => {
@@ -64,13 +74,36 @@ export default function PaginaCursos() {
     state.cursos.push(datos)
     await window.electronAPI.guardarCurso(datos)
     setIsLoading(false)
+    setOpen(false) // Cerrar el Dialog automáticamente
+    toast.success("Curso creado correctamente")
   }
 
   return (
     <div className="flex flex-col w-full h-full bg-zinc-950 text-white">
       <Header />
       <main className="flex-1 p-6 overflow-y-auto">
-        <h1 className="text-2xl font-bold mb-6">Mis Cursos</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold text-white">Mis Cursos</h1>
+
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <div className="flex items-center bg-zinc-950 px-4 py-2 rounded-lg cursor-pointer hover:bg-zinc-900 transition border border-zinc-700 shadow-md">
+                <PlusCircle className="w-6 h-6 text-white mr-2" />
+                <span className="text-white text-sm font-semibold">Nuevo Curso</span>
+              </div>
+            </DialogTrigger>
+            <DialogContent className="bg-zinc-950 border border-zinc-700 text-white max-w-lg">
+              <DialogHeader>
+                <DialogTitle>Crear nuevo curso</DialogTitle>
+              </DialogHeader>
+              <NuevoCurso
+                onCambiar={handleCambiar}
+                onConfirmar={handleConfirmar}
+                isLoading={isLoading}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
 
         <div className="flex overflow-x-auto gap-6">
           {cursos.map((curso) => (
@@ -79,39 +112,14 @@ export default function PaginaCursos() {
               className="w-[375px] shrink-0 bg-zinc-900 border border-zinc-700"
             >
               <CardHeader className="pt-2 pb-0 h-[6.5rem]">
-                <CardTitle className="text-white text-xl font-semibold leading-snug pt-4">
+                <p className="text-3xl text-stone-400 font-semibold leading-snug pt-1">{curso.acronimo}</p>
+                <CardTitle className="text-white text-xl font-semibold leading-snug pt-1">
                   {curso.nombre}
                 </CardTitle>
-                <p className="text-xs text-white">{curso.acronimo} · {curso.grado} · Nivel {curso.nivel}</p>
+                <p className="text-xs text-white"> · {curso.grado} · Nivel {curso.nivel}</p>
               </CardHeader>
-
-              <CardContent>
-                <IconWithTooltipDialog
-                  tooltip="Ver detalles del curso"
-                  title={curso.nombre}
-                  buttonVariant="outline"
-                  buttonSize="sm"
-                  buttonClassName="mt-4 border-zinc-600 text-zinc-950 hover:bg-zinc-800 hover:text-white"
-                  content={
-                    <div className="space-y-4 text-sm text-zinc-300 mt-4">
-                      <p><span className="text-zinc-400 font-bold">Acrónimo:</span> {curso.acronimo}</p>
-                      <p><span className="text-zinc-400 font-bold">Nombre:</span> {curso.nombre}</p>
-                      <p><span className="text-zinc-400 font-bold">Nivel:</span> {curso.nivel}</p>
-                      <p><span className="text-zinc-400 font-bold">Grado:</span> {curso.grado}</p>
-                    </div>
-                  }
-                >
-                  <Eye className="w-16 h-16 mr-1" />
-                </IconWithTooltipDialog>
-              </CardContent>
             </Card>
           ))}
-
-          <NuevoCurso
-            onCambiar={handleCambiar}
-            onConfirmar={handleConfirmar}
-            isLoading={isLoading}
-          />
         </div>
       </main>
     </div>
