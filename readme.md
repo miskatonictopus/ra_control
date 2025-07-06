@@ -50,3 +50,11 @@ Internamente se compone de:
 // Dentro del listado de asignaturas
 <DialogEditarAsignaturaFlow asignatura={asig} />
 ```
+### CONSULTA DE LA BDD
+sqlite3 app/data/database.db
+
+.headers on
+.mode column
+SELECT * FROM cursos;
+
+.quit

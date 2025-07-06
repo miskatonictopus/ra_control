@@ -3,6 +3,19 @@ const path = require("path");
 const crypto = require("crypto");
 const { app, BrowserWindow, ipcMain } = require("electron");
 
+const Database = require("better-sqlite3")
+const dbPath = path.join(__dirname, "data", "database.db")
+const db = new Database(dbPath)
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS cursos (
+    acronimo TEXT PRIMARY KEY,
+    nombre TEXT NOT NULL,
+    nivel TEXT NOT NULL,
+    grado TEXT NOT NULL
+  );
+`)
+
 // 📁 Carpeta persistente local dentro del proyecto
 const dataDir = path.join(__dirname, "data");
 const alumnosDir = path.join(dataDir, "alumnos");
@@ -94,33 +107,51 @@ ipcMain.handle("leer-asignaturas-locales", async () => {
 // 🏫 CURSOS
 // =======================
 
-ipcMain.handle("guardar-curso", async (event, filename, data) => {
-  const cursosDir = path.join(__dirname, "data", "cursos")
-  fs.mkdirSync(cursosDir, { recursive: true })
-
-  const filePath = path.join(cursosDir, filename)
-
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8")
-
-  console.log("✅ Curso guardado en:", filePath)
+ipcMain.handle("guardar-curso", (event, curso) => {
+  console.log("📦 CURSO RECIBIDO:", curso) // ← Añade esto
+  const stmt = db.prepare(`
+    INSERT OR REPLACE INTO cursos (acronimo, nombre, nivel, grado)
+    VALUES (?, ?, ?, ?)
+  `)
+  console.log("🧪 CURSO RECIBIDO:", curso)
+  stmt.run(curso.acronimo, curso.nombre, curso.nivel, curso.grado)
+  console.log("✅ Curso guardado:", curso.acronimo)
   return true
 })
 
-
-ipcMain.handle("leer-cursos-locales", async () => {
-  const cursosDir = path.join(__dirname, "data", "cursos")
-  fs.mkdirSync(cursosDir, { recursive: true })
-
-  const archivos = fs.readdirSync(cursosDir)
-  const cursos = archivos
-    .filter((archivo) => archivo.endsWith(".json"))
-    .map((archivo) => {
-      const contenido = fs.readFileSync(path.join(cursosDir, archivo), "utf-8")
-      return JSON.parse(contenido)
-    })
-
-  return cursos
+ipcMain.handle("leer-cursos", () => {
+  const rows = db.prepare(`SELECT * FROM cursos`).all()
+  return rows
 })
+
+
+// ipcMain.handle("guardar-curso", async (event, filename, data) => {
+//   const cursosDir = path.join(__dirname, "data", "cursos")
+//   fs.mkdirSync(cursosDir, { recursive: true })
+
+//   const filePath = path.join(cursosDir, filename)
+
+//   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8")
+
+//   console.log("✅ Curso guardado en:", filePath)
+//   return true
+// })
+
+
+// ipcMain.handle("leer-cursos-locales", async () => {
+//   const cursosDir = path.join(__dirname, "data", "cursos")
+//   fs.mkdirSync(cursosDir, { recursive: true })
+
+//   const archivos = fs.readdirSync(cursosDir)
+//   const cursos = archivos
+//     .filter((archivo) => archivo.endsWith(".json"))
+//     .map((archivo) => {
+//       const contenido = fs.readFileSync(path.join(cursosDir, archivo), "utf-8")
+//       return JSON.parse(contenido)
+//     })
+
+//   return cursos
+// })
 
 // =======================
 // 🧑‍🎓 ALUMNOS (cifrados)

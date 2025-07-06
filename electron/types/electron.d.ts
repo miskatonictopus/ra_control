@@ -1,4 +1,3 @@
-// app/types/electron.d.ts
 export {}
 
 declare global {
@@ -10,14 +9,15 @@ declare global {
     guardarAsignatura: (filename: string, data: any) => Promise<void>
     leerAsignaturasLocales: () => Promise<any[]>
 
-    guardarCurso: (data: {
+    guardarCurso: (curso: {
       acronimo: string
       nombre: string
       nivel: string
       grado: string
-    }) => Promise<void>
+    }) => Promise<boolean>
 
-    leerCursosLocales: () => Promise<any[]>
+    leerCursos: () => Promise<any[]>   // 👈 esto debe coincidir con preload.js
+
     guardarAlumno: (data: any) => Promise<void>
     leerAlumnos: () => Promise<any[]>
   }

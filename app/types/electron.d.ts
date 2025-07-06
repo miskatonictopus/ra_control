@@ -8,8 +8,8 @@ declare global {
   interface ElectronAPI {
     guardarAsignatura: (filename: string, data: any) => Promise<void>
     leerAsignaturasLocales: () => Promise<Asignatura[]>
-    guardarCurso: (filename: string, data: any) => Promise<void>
-    leerCursosLocales: () => Promise<Curso[]>
+    guardarCurso: (curso: Curso) => Promise<void>
+    leerCursos: () => Promise<Curso[]>
     guardarAlumno: (data: Alumno) => Promise<void>
     leerAlumnos: () => Promise<Alumno[]>
   }

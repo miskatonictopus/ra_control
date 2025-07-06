@@ -37,7 +37,7 @@
     "app/types",
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "types/electron.d.ts"
+    "app/types/electron.d.ts"
   ],
   "exclude": [
     "node_modules"

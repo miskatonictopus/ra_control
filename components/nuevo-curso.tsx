@@ -44,11 +44,16 @@ export function NuevoCurso({
   const isFormValid =
     acronimo.trim() && nombre.trim() && nivel.trim() && grado.trim()
 
-  const handleConfirmar = () => {
-    if (onConfirmar) {
-      onConfirmar({ acronimo, nombre, nivel, grado })
+    const handleConfirmar = () => {
+      if (onConfirmar) {
+        onConfirmar({
+          acronimo: acronimo.trim(),
+          nombre: nombre.trim(),
+          nivel: nivel.trim(),
+          grado: grado.trim()
+        })
+      }
     }
-  }
 
   return (
     <Card className="bg-zinc-900 border-zinc-700 relative w-[375px] shrink-0">

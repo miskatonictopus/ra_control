@@ -28,7 +28,7 @@ export default function PaginaCursos() {
   useEffect(() => {
     const cargarCursos = async () => {
       try {
-        const cursosLocales = await window.electronAPI.leerCursosLocales()
+        const cursosLocales = await window.electronAPI.leerCursos()
 
         type CursoDesdeJSON = {
           acronimo: string
@@ -75,13 +75,11 @@ export default function PaginaCursos() {
       return
     }
   
-    const filename = `${datos.acronimo}.json`
     console.log("handleConfirmar - datos:", datos)
-    console.log("handleConfirmar - filename:", filename)
     try {
       setIsLoading(true)
       state.cursos.push(datos)
-      await window.electronAPI.guardarCurso(filename, datos)
+      window.electronAPI.guardarCurso(datos)
       toast.success("Curso creado correctamente")
       setOpen(false)
     } catch (error) {

@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require("electron");
+const { contextBridge, ipcRenderer } = require("electron")
 
 contextBridge.exposeInMainWorld("electronAPI", {
   guardarAsignatura: (filename, data) =>
@@ -7,17 +7,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
   leerAsignaturasLocales: () =>
     ipcRenderer.invoke("leer-asignaturas-locales"),
 
-    guardarCurso: (filename, data) =>
-    ipcRenderer.invoke("guardar-curso", filename, data),
-  
+  guardarCurso: (curso) =>
+    ipcRenderer.invoke("guardar-curso", curso),
 
-  leerCursosLocales: () => ipcRenderer.invoke("leer-cursos-locales"),
-
+  leerCursos: () =>
+    ipcRenderer.invoke("leer-cursos"), // 👈 que coincida con el tipo
   guardarAlumno: (data) =>
     ipcRenderer.invoke("guardar-alumno", data),
-    
-  leerAlumnos: () => ipcRenderer.invoke("leer-alumnos")
+
+  leerAlumnos: () =>
+    ipcRenderer.invoke("leer-alumnos"),
 })
-
-console.log("✅ PRELOAD EJECUTADO");
-
