@@ -7,7 +7,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   leerAsignaturasLocales: () =>
     ipcRenderer.invoke("leer-asignaturas-locales"),
 
-  guardarCurso: (data) => ipcRenderer.invoke("guardar-curso", data),
+    guardarCurso: (filename, data) =>
+    ipcRenderer.invoke("guardar-curso", filename, data),
+  
 
   leerCursosLocales: () => ipcRenderer.invoke("leer-cursos-locales"),
 

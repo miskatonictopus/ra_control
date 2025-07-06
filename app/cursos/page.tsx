@@ -70,13 +70,29 @@ export default function PaginaCursos() {
     nivel: string
     grado: string
   }) => {
-    setIsLoading(true)
-    state.cursos.push(datos)
-    await window.electronAPI.guardarCurso(datos)
-    setIsLoading(false)
-    setOpen(false) // Cerrar el Dialog automáticamente
-    toast.success("Curso creado correctamente")
+    if (!datos.acronimo) {
+      toast.error("El acrónimo no puede estar vacío")
+      return
+    }
+  
+    const filename = `${datos.acronimo}.json`
+    console.log("handleConfirmar - datos:", datos)
+    console.log("handleConfirmar - filename:", filename)
+    try {
+      setIsLoading(true)
+      state.cursos.push(datos)
+      await window.electronAPI.guardarCurso(filename, datos)
+      toast.success("Curso creado correctamente")
+      setOpen(false)
+    } catch (error) {
+      toast.error("Error al guardar el curso")
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
+  
+  
 
   return (
     <div className="flex flex-col w-full h-full bg-zinc-950 text-white">
@@ -111,12 +127,12 @@ export default function PaginaCursos() {
               key={curso.acronimo}
               className="w-[375px] shrink-0 bg-zinc-900 border border-zinc-700"
             >
-              <CardHeader className="pt-2 pb-0 h-[6.5rem]">
-                <p className="text-3xl text-stone-400 font-semibold leading-snug pt-1">{curso.acronimo}</p>
+              <CardHeader className="pt-2 pb-0">
+                <p className="text-3xl text-white font-semibold leading-snug pt-1">{curso.acronimo}</p>
                 <CardTitle className="text-white text-xl font-semibold leading-snug pt-1">
                   {curso.nombre}
                 </CardTitle>
-                <p className="text-xs text-white"> · {curso.grado} · Nivel {curso.nivel}</p>
+                <p className="text-xs text-zinc-400">GRADO {curso.grado} · Nivel {curso.nivel}</p>
               </CardHeader>
             </Card>
           ))}

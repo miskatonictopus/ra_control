@@ -94,11 +94,10 @@ ipcMain.handle("leer-asignaturas-locales", async () => {
 // 🏫 CURSOS
 // =======================
 
-ipcMain.handle("guardar-curso", async (event, data) => {
+ipcMain.handle("guardar-curso", async (event, filename, data) => {
   const cursosDir = path.join(__dirname, "data", "cursos")
   fs.mkdirSync(cursosDir, { recursive: true })
 
-  const filename = `${data.nombre}.json`
   const filePath = path.join(cursosDir, filename)
 
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8")

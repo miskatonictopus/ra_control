@@ -19,12 +19,14 @@ import {
   HoverCardContent,
 } from "@/components/ui/hover-card"
 
+// ✅ Tipos actualizados para alinearse con el modelo oficial de cursos
 interface NuevoCursoProps {
   onCambiar?: () => void
   onConfirmar?: (datos: {
+    acronimo: string
     nombre: string
-    anyo: string
-    descripcion: string
+    nivel: string
+    grado: string
   }) => void
   isLoading?: boolean
 }
@@ -34,15 +36,17 @@ export function NuevoCurso({
   onConfirmar,
   isLoading = false,
 }: NuevoCursoProps) {
+  const [acronimo, setAcronimo] = useState("")
   const [nombre, setNombre] = useState("")
-  const [anyo, setAnyo] = useState("")
-  const [descripcion, setDescripcion] = useState("")
+  const [nivel, setNivel] = useState("")
+  const [grado, setGrado] = useState("")
 
-  const isFormValid = nombre.trim() && anyo.trim()
+  const isFormValid =
+    acronimo.trim() && nombre.trim() && nivel.trim() && grado.trim()
 
   const handleConfirmar = () => {
     if (onConfirmar) {
-      onConfirmar({ nombre, anyo, descripcion })
+      onConfirmar({ acronimo, nombre, nivel, grado })
     }
   }
 
@@ -57,9 +61,9 @@ export function NuevoCurso({
         <HoverCardContent className="w-80 text-sm leading-snug">
           <strong>¿Cómo crear un nuevo curso?</strong>
           <ul className="list-disc pl-4 mt-2">
-            <li>Introduce el nombre del curso (Ej: DAW1).</li>
-            <li>Indica el año (Ej: 2025-26).</li>
-            <li>Puedes añadir una breve descripción.</li>
+            <li>Introduce el acrónimo del curso (Ej: DAMM, DAW, SMR2...)</li>
+            <li>Escribe el nombre completo del ciclo.</li>
+            <li>Indica el nivel (1 o 2) y el grado (medio o superior).</li>
           </ul>
         </HoverCardContent>
       </HoverCard>
@@ -75,29 +79,38 @@ export function NuevoCurso({
 
       <CardContent className="space-y-4">
         <InputWithLabel
+          id="acronimo"
+          label="Acrónimo del Curso"
+          value={acronimo}
+          onChange={setAcronimo}
+          placeholder="Ej: DAMM"
+          disabled={isLoading}
+        />
+
+        <InputWithLabel
           id="nombre"
           label="Nombre del Curso"
           value={nombre}
           onChange={setNombre}
-          placeholder="Ej: DAW1, ASIR2..."
+          placeholder="Ej: Diseño de Aplicaciones Multiplataforma"
           disabled={isLoading}
         />
 
         <InputWithLabel
-          id="anyo"
-          label="Año Académico"
-          value={anyo}
-          onChange={setAnyo}
-          placeholder="Ej: 2025-26"
+          id="nivel"
+          label="Nivel"
+          value={nivel}
+          onChange={setNivel}
+          placeholder="Ej: 2"
           disabled={isLoading}
         />
 
         <InputWithLabel
-          id="descripcion"
-          label="Descripción"
-          value={descripcion}
-          onChange={setDescripcion}
-          placeholder="Grupo A tarde / modalidad online"
+          id="grado"
+          label="Grado"
+          value={grado}
+          onChange={setGrado}
+          placeholder="Ej: superior"
           disabled={isLoading}
         />
 
