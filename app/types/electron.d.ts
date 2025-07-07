@@ -10,6 +10,7 @@ declare global {
     leerAsignaturasLocales: () => Promise<Asignatura[]>
     guardarCurso: (curso: Curso) => Promise<void>
     leerCursos: () => Promise<Curso[]>
+    borrarCurso: (id: string) => Promise<void>
     guardarAlumno: (data: Alumno) => Promise<void>
     leerAlumnos: () => Promise<Alumno[]>
   }
@@ -34,4 +35,5 @@ declare global {
     asignaturas: string[];      
   }
 }
+
 

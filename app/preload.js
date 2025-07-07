@@ -11,7 +11,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("guardar-curso", curso),
 
   leerCursos: () =>
-    ipcRenderer.invoke("leer-cursos"), // 👈 que coincida con el tipo
+    ipcRenderer.invoke("leer-cursos"), 
+
+  borrarCurso: (id) => ipcRenderer.invoke("borrar-curso", id),
+
   guardarAlumno: (data) =>
     ipcRenderer.invoke("guardar-alumno", data),
 

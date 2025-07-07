@@ -21,6 +21,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
+import { DialogBorrarCursoFlow } from "@/components/DialogBorrarCursoFlow"
+
 export default function PaginaCursos() {
   const snap = useSnapshot(state)
   const cursos = snap.cursos
@@ -87,9 +89,10 @@ export default function PaginaCursos() {
 
   const handleConfirmar = async (datos: {
     acronimo: string
-    nombre: string
-    nivel: string
-    grado: string
+  nombre: string
+  nivel: string
+  grado: string
+  grupo?: string
   }) => {
     if (!datos.acronimo) {
       toast.error("El acrónimo no puede estar vacío")
@@ -99,10 +102,11 @@ export default function PaginaCursos() {
     console.log("handleConfirmar - datos:", datos)
     try {
       setIsLoading(true)
-      const cursoConId = {
-        ...datos,
-        id: `${datos.acronimo.trim()} ${datos.nivel.trim()}`
-      }
+      const grupo = datos.grupo?.trim()
+const cursoConId = {
+  ...datos,
+  id: `${datos.acronimo.trim()} ${datos.nivel.trim()}${grupo ? grupo.toUpperCase() : ""}`
+}
 
       state.cursos.push(cursoConId)
       await window.electronAPI.guardarCurso(cursoConId)
@@ -171,22 +175,7 @@ export default function PaginaCursos() {
                 </IconWithTooltipDialog>
 
                 {/* Botón borrar con tooltip normal */}
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        onClick={() => handleBorrarCurso(curso.acronimo)}
-                        className="text-zinc-400 hover:text-emerald-400 transition-colors"
-                        aria-label="Borrar curso"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="text-xs">Borrar curso</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+               <DialogBorrarCursoFlow curso={curso} />
               </div>
 
               <CardHeader className="pt-2 pb-0">

@@ -140,6 +140,22 @@ ipcMain.handle("guardar-curso", (event, curso) => {
   return { ok: true }
 })
 
+ipcMain.handle("borrar-curso", async (_, id) => {
+  try {
+    const stmt = db.prepare("DELETE FROM cursos WHERE id = ?");
+    const result = stmt.run(id);
+
+    if (result.changes > 0) {
+      return { success: true };
+    } else {
+      throw new Error("Curso no encontrado");
+    }
+  } catch (error) {
+    console.error("Error al borrar curso:", error);
+    throw error;
+  }
+});
+
 
 // ipcMain.handle("guardar-curso", async (event, filename, data) => {
 //   const cursosDir = path.join(__dirname, "data", "cursos")
