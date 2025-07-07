@@ -9,10 +9,12 @@ const db = new Database(dbPath)
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS cursos (
-    acronimo TEXT PRIMARY KEY,
+    id TEXT PRIMARY KEY,
+    acronimo TEXT,
     nombre TEXT NOT NULL,
     nivel TEXT NOT NULL,
-    grado TEXT NOT NULL
+    grado TEXT NOT NULL,
+    grupo TEXT
   );
 `)
 
@@ -107,21 +109,35 @@ ipcMain.handle("leer-asignaturas-locales", async () => {
 // 🏫 CURSOS
 // =======================
 
-ipcMain.handle("guardar-curso", (event, curso) => {
-  console.log("📦 CURSO RECIBIDO:", curso) // ← Añade esto
-  const stmt = db.prepare(`
-    INSERT OR REPLACE INTO cursos (acronimo, nombre, nivel, grado)
-    VALUES (?, ?, ?, ?)
-  `)
-  console.log("🧪 CURSO RECIBIDO:", curso)
-  stmt.run(curso.acronimo, curso.nombre, curso.nivel, curso.grado)
-  console.log("✅ Curso guardado:", curso.acronimo)
-  return true
+ipcMain.handle("leer-cursos", () => {
+  return db.prepare("SELECT * FROM cursos").all()
 })
 
-ipcMain.handle("leer-cursos", () => {
-  const rows = db.prepare(`SELECT * FROM cursos`).all()
-  return rows
+ipcMain.handle("guardar-curso", (event, curso) => {
+  const idCurso = `${curso.acronimo.trim()} ${curso.nivel.trim()}${curso.grupo?.trim() ?? ""}`
+
+  const yaExiste = db
+    .prepare("SELECT id FROM cursos WHERE id = ?")
+    .get(idCurso)
+
+  if (yaExiste) {
+    throw new Error(`Ya existe un curso con ID "${idCurso}"`)
+  }
+
+  db.prepare(`
+    INSERT INTO cursos (id, acronimo, nombre, nivel, grado, grupo)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).run(
+    idCurso,
+    curso.acronimo,
+    curso.nombre,
+    curso.nivel,
+    curso.grado,
+    curso.grupo ?? ""
+  )
+
+  console.log("✅ Curso guardado con ID:", idCurso)
+  return { ok: true }
 })
 
 

@@ -19,7 +19,6 @@ import {
   HoverCardContent,
 } from "@/components/ui/hover-card"
 
-// ✅ Tipos actualizados para alinearse con el modelo oficial de cursos
 interface NuevoCursoProps {
   onCambiar?: () => void
   onConfirmar?: (datos: {
@@ -27,6 +26,7 @@ interface NuevoCursoProps {
     nombre: string
     nivel: string
     grado: string
+    grupo?: string
   }) => void
   isLoading?: boolean
 }
@@ -40,20 +40,22 @@ export function NuevoCurso({
   const [nombre, setNombre] = useState("")
   const [nivel, setNivel] = useState("")
   const [grado, setGrado] = useState("")
+  const [grupo, setGrupo] = useState("")
 
   const isFormValid =
     acronimo.trim() && nombre.trim() && nivel.trim() && grado.trim()
 
-    const handleConfirmar = () => {
-      if (onConfirmar) {
-        onConfirmar({
-          acronimo: acronimo.trim(),
-          nombre: nombre.trim(),
-          nivel: nivel.trim(),
-          grado: grado.trim()
-        })
-      }
+  const handleConfirmar = () => {
+    if (onConfirmar) {
+      onConfirmar({
+        acronimo: acronimo.trim(),
+        nombre: nombre.trim(),
+        nivel: nivel.trim(),
+        grado: grado.trim(),
+        grupo: grupo.trim() || undefined, // Solo lo pasamos si hay contenido
+      })
     }
+  }
 
   return (
     <Card className="bg-zinc-900 border-zinc-700 relative w-[375px] shrink-0">
@@ -69,6 +71,7 @@ export function NuevoCurso({
             <li>Introduce el acrónimo del curso (Ej: DAMM, DAW, SMR2...)</li>
             <li>Escribe el nombre completo del ciclo.</li>
             <li>Indica el nivel (1 o 2) y el grado (medio o superior).</li>
+            <li>Opcionalmente, indica el grupo (A, B...).</li>
           </ul>
         </HoverCardContent>
       </HoverCard>
@@ -116,6 +119,15 @@ export function NuevoCurso({
           value={grado}
           onChange={setGrado}
           placeholder="Ej: superior"
+          disabled={isLoading}
+        />
+
+        <InputWithLabel
+          id="grupo"
+          label="Grupo (opcional)"
+          value={grupo}
+          onChange={setGrupo}
+          placeholder="Ej: A"
           disabled={isLoading}
         />
 

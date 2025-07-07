@@ -7,9 +7,11 @@ import { state } from "@/lib/store"
 import { Header } from "@/components/Header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { IconWithTooltipDialog } from "@/components/IconWithTooltipDialog"
-import { Eye, PlusCircle } from "lucide-react"
+import { PlusCircle, Trash2, SquarePen } from "lucide-react"
 import { NuevoCurso } from "@/components/nuevo-curso"
 import { toast } from "sonner"
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+
 
 import {
   Dialog,
@@ -38,19 +40,28 @@ export default function PaginaCursos() {
         }
 
         const cursosValidos = (cursosLocales as any[]).filter(
-          (c): c is CursoDesdeJSON =>
+          (c) =>
+            typeof c.id === "string" &&
             typeof c.acronimo === "string" &&
             typeof c.nombre === "string" &&
             typeof c.nivel === "string" &&
             typeof c.grado === "string"
-        )
+        ) as {
+          id: string
+          acronimo: string
+          nombre: string
+          nivel: string
+          grado: string
+        }[]
 
         state.cursos = cursosValidos.map((c) => ({
+          id: c.id,
           acronimo: c.acronimo,
           nombre: c.nombre,
           nivel: c.nivel,
           grado: c.grado,
         }))
+
       } catch (error) {
         console.error("❌ Error cargando cursos:", error)
         state.cursos = []
@@ -64,6 +75,16 @@ export default function PaginaCursos() {
     console.log("Cambiar curso")
   }
 
+  const handleEditarCurso = (curso: Curso) => {
+    console.log("Editar curso:", curso)
+    // Mostrar modal o navegar a pantalla de edición
+  }
+
+  const handleBorrarCurso = (acronimo: string) => {
+    // Aquí añadiremos confirmación y llamada a la base de datos
+    console.log("Borrar curso:", acronimo)
+  }
+
   const handleConfirmar = async (datos: {
     acronimo: string
     nombre: string
@@ -74,12 +95,17 @@ export default function PaginaCursos() {
       toast.error("El acrónimo no puede estar vacío")
       return
     }
-  
+
     console.log("handleConfirmar - datos:", datos)
     try {
       setIsLoading(true)
-      state.cursos.push(datos)
-      window.electronAPI.guardarCurso(datos)
+      const cursoConId = {
+        ...datos,
+        id: `${datos.acronimo.trim()} ${datos.nivel.trim()}`
+      }
+
+      state.cursos.push(cursoConId)
+      await window.electronAPI.guardarCurso(cursoConId)
       toast.success("Curso creado correctamente")
       setOpen(false)
     } catch (error) {
@@ -89,8 +115,8 @@ export default function PaginaCursos() {
       setIsLoading(false)
     }
   }
-  
-  
+
+
 
   return (
     <div className="flex flex-col w-full h-full bg-zinc-950 text-white">
@@ -122,17 +148,59 @@ export default function PaginaCursos() {
         <div className="flex overflow-x-auto gap-6">
           {cursos.map((curso) => (
             <Card
-              key={curso.acronimo}
-              className="w-[375px] shrink-0 bg-zinc-900 border border-zinc-700"
+              key={curso.id}
+              className="relative w-[375px] shrink-0 bg-zinc-900 border border-zinc-700"
             >
+              {/* Contenedor absoluto para los botones */}
+              <div className="absolute top-2 right-2 flex space-x-2">
+                {/* Botón editar con tooltip y dialog */}
+                <IconWithTooltipDialog
+                  tooltip="Editar curso"
+                  title={`Editar curso: ${curso.acronimo}`}
+                  content={
+                    <div className="space-y-4 text-sm">
+                      {/* Aquí iría el formulario de edición real */}
+                      <p>Formulario para editar el curso (nombre, nivel, grado...)</p>
+                    </div>
+                  }
+                  buttonVariant="outline"
+                  buttonSize="icon"
+                  buttonClassName="text-zinc-400 hover:text-emerald-400 transition-colors"
+                >
+                  <SquarePen className="w-5 h-5" />
+                </IconWithTooltipDialog>
+
+                {/* Botón borrar con tooltip normal */}
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={() => handleBorrarCurso(curso.acronimo)}
+                        className="text-zinc-400 hover:text-emerald-400 transition-colors"
+                        aria-label="Borrar curso"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">Borrar curso</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+
               <CardHeader className="pt-2 pb-0">
-                <p className="text-3xl text-white font-semibold leading-snug pt-1">{curso.acronimo}</p>
+                <p className="text-3xl text-white font-semibold leading-snug pt-1">
+                  {curso.id}
+                </p>
                 <CardTitle className="text-white text-xl font-semibold leading-snug pt-1">
                   {curso.nombre}
                 </CardTitle>
                 <p className="text-xs text-zinc-400">GRADO {curso.grado} · Nivel {curso.nivel}</p>
               </CardHeader>
             </Card>
+
+
           ))}
         </div>
       </main>

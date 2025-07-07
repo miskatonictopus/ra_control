@@ -15,6 +15,7 @@ export type Asignatura = {
 }
 
 export type Curso = {
+  id: string
   acronimo: string
   nombre: string
   nivel: string
@@ -27,4 +28,6 @@ export const state = proxy({
   asignaturas: [] as Asignatura[],
   cursos: [] as Curso[],
 })
+
+
 
